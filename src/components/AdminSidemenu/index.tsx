@@ -3,7 +3,7 @@ import { Button } from '@payloadcms/ui'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FC, ReactNode } from 'react'
-import { FaTimes } from 'react-icons/fa'
+import { MdSpaceDashboard } from 'react-icons/md'
 
 const ListboxWrapper: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -23,12 +23,66 @@ const AdminSidemenu = (props: any) => {
   return (
     <div className="h-full pt-20 px-4">
       <ListboxWrapper className="mb-2 px-4">
-        <label className="font-bold text-lg line-clamp-1">Admin</label>
+        <label className="font-bold text-lg line-clamp-1 mb-2">Admin</label>
         <div className="flex flex-col gap-2">
           <Link href="/admin" className="w-full no-underline">
-            <Button className="flex items-center gap-2 w-full">
-              <FaTimes size={16} />
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
               <span>Dashboard</span>
+            </Button>
+          </Link>
+          <Link href="/admin" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
+              <span>Usuarios</span>
+            </Button>
+          </Link>
+          <Link href="/admin" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
+              <span>Transacciones</span>
+            </Button>
+          </Link>
+          <Link href="/admin" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
+              <span>Cupones</span>
+            </Button>
+          </Link>
+          <Link href="/admin" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
+              <span>Retiros</span>
+            </Button>
+          </Link>
+          <Link href="/admin" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdSpaceDashboard size={16} />}
+              iconPosition="left"
+            >
+              <span>Reportes</span>
             </Button>
           </Link>
         </div>
