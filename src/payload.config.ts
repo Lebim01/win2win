@@ -6,16 +6,17 @@ import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
-import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
-import { Posts } from './collections/Posts'
-import { Users } from './collections/Users'
 import { Footer } from './Footer/config'
 import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Admins } from './collections/Admins'
+import { Customers } from './collections/Customers/index'
+import { ensureRootAdmin } from './scripts/create-initial-admin'
+import { ReferralPayouts } from './collections/ReferralPayouts'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -23,17 +24,20 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
-      beforeDashboard: ['@/components/BeforeDashboard'],
+      Nav: '@/components/AdminSidemenu',
+
+      views: {
+        dashboard: {
+          Component: '@/views/Dashboard',
+          path: '/',
+          exact: true,
+        },
+      },
     },
     importMap: {
       baseDir: path.resolve(dirname),
     },
-    user: Users.slug,
+    user: Admins.slug,
     livePreview: {
       breakpoints: [
         {
@@ -64,7 +68,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Media, Admins, Customers, ReferralPayouts],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -91,4 +95,12 @@ export default buildConfig({
     },
     tasks: [],
   },
+
+  /*onInit: async (payload) => {
+    try {
+      await ensureRootAdmin(payload)
+    } catch (err) {
+      payload.logger.error(`Error creando admin inicial: ${(err as Error).message}`)
+    }
+  },*/
 })
