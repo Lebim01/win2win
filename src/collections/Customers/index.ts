@@ -1,5 +1,3 @@
-import { ensureUniqueReferralCode, resolveRootByInviterCode } from '@/business/customers'
-import { Customer } from '@/payload-types'
 import { CollectionConfig } from 'payload'
 import { hookAssignSponsorFromInviterCode } from './hooks'
 import { activete } from '@/business/memberships'
@@ -12,8 +10,10 @@ export const Customers: CollectionConfig = {
     maxLoginAttempts: 20,
     tokenExpiration: 60 * 60 * 24 * 10, // 10 días
   },
+  defaultSort: 'id',
   admin: {
     useAsTitle: 'email',
+    defaultColumns: ['email', 'name', 'referralCode', 'membership.isActive', 'wallet.balance'],
     hidden: ({ user }) => !user || user.collection !== 'admins',
   },
   access: {
@@ -35,7 +35,7 @@ export const Customers: CollectionConfig = {
         },
       }
     },
-    delete: ({ req }) => req.user?.collection === 'admins',
+    delete: () => false,
   },
   fields: [
     {
@@ -54,7 +54,7 @@ export const Customers: CollectionConfig = {
       type: 'select',
       defaultValue: 'customer',
       required: true,
-      admin: { readOnly: true },
+      admin: { readOnly: true, hidden: true },
       options: [{ label: 'Customer', value: 'customer' }],
     },
 
@@ -65,13 +65,13 @@ export const Customers: CollectionConfig = {
       type: 'text',
       unique: true,
       index: true,
-      admin: { description: 'Código único para referidos' },
+      admin: { description: 'Código único para referidos', readOnly: true },
     },
     // código del sponsor que usó al registrarse (query ?ref=)
     {
       name: 'inviterCode',
       type: 'text',
-      admin: { description: 'Código del sponsor usado al registrarse' },
+      admin: { description: 'Código del sponsor usado al registrarse', readOnly: true },
     },
     // padre efectivo (antes llamado referredBy)
     {
@@ -79,7 +79,7 @@ export const Customers: CollectionConfig = {
       type: 'relationship',
       relationTo: 'customers',
       index: true,
-      admin: { description: 'Nodo padre efectivo (primer hueco BFS)' },
+      admin: { description: 'Nodo padre efectivo (arbol)', readOnly: true },
     },
     // raíz del subárbol (el sponsor cuyo código se usó)
     {
@@ -87,9 +87,15 @@ export const Customers: CollectionConfig = {
       type: 'relationship',
       relationTo: 'customers',
       index: true,
+      admin: {
+        description: 'Quien lo refirio',
+        readOnly: true,
+        allowCreate: false,
+        allowEdit: false,
+      },
     },
     // nivel relativo al root (0..7)
-    { name: 'level', type: 'number', min: 0, max: 7, index: true },
+    { name: 'level', type: 'number', min: 0, max: 7, index: true, admin: { hidden: true } },
     // ruta de ancestros (root -> ... -> parent)
     {
       name: 'ancestors',
@@ -97,6 +103,10 @@ export const Customers: CollectionConfig = {
       relationTo: 'customers',
       hasMany: true,
       index: true,
+      admin: {
+        readOnly: true,
+        hidden: true,
+      },
     },
     // hijos directos (máx 5)
     {
@@ -104,16 +114,34 @@ export const Customers: CollectionConfig = {
       type: 'relationship',
       relationTo: 'customers',
       hasMany: true,
+      admin: {
+        readOnly: true,
+        hidden: true,
+      },
     },
     // contador para control rápido / atómico
-    { name: 'childrenCount', type: 'number', defaultValue: 0, index: true },
+    {
+      name: 'childrenCount',
+      type: 'number',
+      defaultValue: 0,
+      index: true,
+      admin: { description: 'Cantidad de hijos', readOnly: true },
+    },
     // se fija a true cuando la asignación quedó confirmada
-    { name: 'placementLocked', type: 'checkbox', defaultValue: false },
+    {
+      name: 'placementLocked',
+      type: 'checkbox',
+      defaultValue: false,
+      admin: { readOnly: true, hidden: true },
+    },
 
     {
       name: 'membership',
       type: 'group',
       label: 'Membresía',
+      admin: {
+        readOnly: true,
+      },
       fields: [
         { name: 'isActive', type: 'checkbox', defaultValue: false, index: true },
         { name: 'currentPeriodStart', type: 'date' },
@@ -129,7 +157,7 @@ export const Customers: CollectionConfig = {
       type: 'array',
       label: 'Historial de activaciones',
       labels: { singular: 'Activación', plural: 'Activaciones' },
-      admin: { description: 'Cada activación/renovación mensual' },
+      admin: { description: 'Cada activación/renovación mensual', readOnly: true },
       fields: [
         { name: 'activatedAt', type: 'date', required: true },
         { name: 'periodStart', type: 'date', required: true },

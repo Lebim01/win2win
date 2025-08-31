@@ -35,7 +35,7 @@ const AdminSidemenu = (props: any) => {
               <span>Dashboard</span>
             </Button>
           </Link>
-          <Link href="/admin" className="w-full no-underline">
+          <Link href="/admin/collections/customers" className="w-full no-underline">
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"

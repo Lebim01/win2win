@@ -658,13 +658,19 @@ export interface Customer {
    */
   inviterCode?: string | null;
   /**
-   * Nodo padre efectivo (primer hueco BFS)
+   * Nodo padre efectivo (arbol)
    */
   referredBy?: (number | null) | Customer;
+  /**
+   * Quien lo refirio
+   */
   root?: (number | null) | Customer;
   level?: number | null;
   ancestors?: (number | Customer)[] | null;
   children?: (number | Customer)[] | null;
+  /**
+   * Cantidad de hijos
+   */
   childrenCount?: number | null;
   placementLocked?: boolean | null;
   membership?: {
