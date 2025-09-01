@@ -1,6 +1,8 @@
 import { CollectionConfig } from 'payload'
 import { hookAssignSponsorFromInviterCode } from './hooks'
 import { activete } from '@/business/memberships'
+import { redeemCouponAtomically } from '@/business/coupons'
+import { Coupon } from '@/payload-types'
 
 export const Customers: CollectionConfig = {
   slug: 'customers',
@@ -224,6 +226,43 @@ export const Customers: CollectionConfig = {
           ok: true,
           count: customers.totalDocs,
         })
+      },
+    },
+    {
+      path: '/memberships/activate',
+      method: 'post',
+      handler: async (req) => {
+        try {
+          const data: any = await req.json!()
+          const { customerId, amount, paymentRef, meta, couponCode } = data
+          if (!customerId) return Response.json({ error: 'customerId requerido' }, { status: 400 })
+
+          const isAdmin = req.user?.collection === 'admins'
+          if (!isAdmin && req.user?.id !== customerId) {
+            return Response.json({ error: 'forbidden' }, { status: 403 })
+          }
+
+          // ====== CUPÓN (opcional) ======
+          let appliedCoupon: Partial<Coupon> | undefined
+          if (couponCode && String(couponCode).trim()) {
+            const redeem = await redeemCouponAtomically(req, couponCode.trim(), customerId)
+            if (!redeem.ok) {
+              return Response.json(
+                { error: 'Cupón inválido', reason: redeem.reason },
+                { status: 400 },
+              )
+            }
+            appliedCoupon = redeem.coupon
+          }
+
+          await activete(req, customerId, amount, { ...paymentRef, appliedCoupon }, meta)
+
+          return Response.json({
+            ok: true,
+          })
+        } catch (e) {
+          return Response.json({ error: 'Membership activation failed' }, { status: 403 })
+        }
       },
     },
   ],

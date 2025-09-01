@@ -73,6 +73,7 @@ export interface Config {
     admins: Admin;
     customers: Customer;
     referral_payouts: ReferralPayout;
+    coupons: Coupon;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -88,6 +89,7 @@ export interface Config {
     admins: AdminsSelect<false> | AdminsSelect<true>;
     customers: CustomersSelect<false> | CustomersSelect<true>;
     referral_payouts: ReferralPayoutsSelect<false> | ReferralPayoutsSelect<true>;
+    coupons: CouponsSelect<false> | CouponsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -754,6 +756,43 @@ export interface ReferralPayout {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons".
+ */
+export interface Coupon {
+  id: number;
+  /**
+   * Random generate
+   */
+  code?: string | null;
+  /**
+   * Dueño del cupón: el usuario que lo puede "dar" a sus referidos
+   */
+  owner: number | Customer;
+  amountOff?: number | null;
+  currency?: string | null;
+  singleUse?: boolean | null;
+  redeemed?: boolean | null;
+  redeemedBy?: (number | null) | Customer;
+  redeemedAt?: string | null;
+  payoutEligible?: boolean | null;
+  /**
+   * Si el cupón no es usado antes de
+   */
+  expiresAt?: string | null;
+  meta?:
+    | {
+        [k: string]: unknown;
+      }
+    | unknown[]
+    | string
+    | number
+    | boolean
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -908,6 +947,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'referral_payouts';
         value: number | ReferralPayout;
+      } | null)
+    | ({
+        relationTo: 'coupons';
+        value: number | Coupon;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1290,6 +1333,25 @@ export interface ReferralPayoutsSelect<T extends boolean = true> {
   level?: T;
   amount?: T;
   currency?: T;
+  meta?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons_select".
+ */
+export interface CouponsSelect<T extends boolean = true> {
+  code?: T;
+  owner?: T;
+  amountOff?: T;
+  currency?: T;
+  singleUse?: T;
+  redeemed?: T;
+  redeemedBy?: T;
+  redeemedAt?: T;
+  payoutEligible?: T;
+  expiresAt?: T;
   meta?: T;
   updatedAt?: T;
   createdAt?: T;

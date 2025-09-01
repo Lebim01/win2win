@@ -17,6 +17,7 @@ import { Admins } from './collections/Admins'
 import { Customers } from './collections/Customers/index'
 import { ensureRootAdmin } from './scripts/create-initial-admin'
 import { ReferralPayouts } from './collections/ReferralPayouts'
+import { Coupons } from './collections/Coupons'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -68,7 +69,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Media, Admins, Customers, ReferralPayouts],
+  collections: [Pages, Media, Admins, Customers, ReferralPayouts, Coupons],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

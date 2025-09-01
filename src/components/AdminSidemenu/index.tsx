@@ -3,7 +3,11 @@ import { Button } from '@payloadcms/ui'
 import clsx from 'clsx'
 import Link from 'next/link'
 import { FC, ReactNode } from 'react'
+import { FaCashRegister, FaRegUserCircle } from 'react-icons/fa'
 import { MdSpaceDashboard } from 'react-icons/md'
+import { RiCoupon3Fill } from 'react-icons/ri'
+import { PiHandWithdrawFill } from 'react-icons/pi'
+import { BiSolidReport } from 'react-icons/bi'
 
 const ListboxWrapper: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -39,7 +43,7 @@ const AdminSidemenu = (props: any) => {
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<MdSpaceDashboard size={16} />}
+              icon={<FaRegUserCircle size={16} />}
               iconPosition="left"
             >
               <span>Usuarios</span>
@@ -49,17 +53,17 @@ const AdminSidemenu = (props: any) => {
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<MdSpaceDashboard size={16} />}
+              icon={<FaCashRegister />}
               iconPosition="left"
             >
               <span>Transacciones</span>
             </Button>
           </Link>
-          <Link href="/admin" className="w-full no-underline">
+          <Link href="/admin/collections/coupons" className="w-full no-underline">
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<MdSpaceDashboard size={16} />}
+              icon={<RiCoupon3Fill size={16} />}
               iconPosition="left"
             >
               <span>Cupones</span>
@@ -69,7 +73,7 @@ const AdminSidemenu = (props: any) => {
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<MdSpaceDashboard size={16} />}
+              icon={<PiHandWithdrawFill size={16} />}
               iconPosition="left"
             >
               <span>Retiros</span>
@@ -79,7 +83,7 @@ const AdminSidemenu = (props: any) => {
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<MdSpaceDashboard size={16} />}
+              icon={<BiSolidReport size={16} />}
               iconPosition="left"
             >
               <span>Reportes</span>
