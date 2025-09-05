@@ -23,6 +23,7 @@ export const seedCustomers = async (payload: Payload) => {
       referredBy: null, // nadie lo invitó
       inviterCode: null, // nadie lo invitó
       _verified: true,
+      role: 'customer',
     },
   })
 
@@ -47,6 +48,7 @@ export const seedCustomers = async (payload: Payload) => {
           ancestors: [...(parent.ancestors ?? []), parent.id],
 
           _verified: true,
+          role: 'customer',
         },
       })
 

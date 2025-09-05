@@ -1,9 +1,36 @@
 'use client'
 import { Button, Input } from '@heroui/react'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
+import { FormEventHandler } from 'react'
 
 const SignIn = () => {
-  const onSubmit = () => {}
+  const router = useRouter()
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/customers/login`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email: formData.get('email'), password: formData.get('password') }),
+      credentials: 'include',
+    })
+
+    if (!response.ok) {
+      alert('login failed')
+      return
+    }
+
+    const result = await response.json()
+
+    router.push('/dashboard')
+  }
 
   return (
     <section>
