@@ -1,0 +1,41 @@
+@import 'tailwindcss';
+@plugin './hero.ts';
+
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-bg: #ffffff;
+  --color-fg: #0f172a;
+  --color-card: #ffffff;
+  --color-primary: #2563eb;
+  --color-border: #e5e7eb;
+}
+
+/* === Overrides Dark cuando html[data-theme="dark"] === */
+html.dark {
+  --color-bg: #0e1524;
+  --color-fg: #e5e7eb;
+  --color-card: #0f141a;
+  --color-primary: #60a5fa;
+  --color-border: #28303a;
+  color-scheme: dark;
+}
+
+html {
+  transition:
+    color 0.2s ease,
+    background-color 0.2s ease;
+  opacity: 0;
+}
+
+html.dark {
+  opacity: 1;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}

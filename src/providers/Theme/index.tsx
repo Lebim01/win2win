@@ -17,19 +17,28 @@ const ThemeContext = createContext(initialContext)
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
   const [theme, setThemeState] = useState<Theme | undefined>(
-    canUseDOM ? (document.documentElement.getAttribute('data-theme') as Theme) : undefined,
+    canUseDOM
+      ? document.documentElement.classList.contains('dark')
+        ? 'dark'
+        : 'light'
+      : undefined,
   )
 
   const setTheme = useCallback((themeToSet: Theme | null) => {
     if (themeToSet === null) {
       window.localStorage.removeItem(themeLocalStorageKey)
       const implicitPreference = getImplicitPreference()
-      document.documentElement.setAttribute('data-theme', implicitPreference || '')
+      if (document.documentElement.classList.contains('dark'))
+        document.documentElement.classList.remove('dark')
+      if (document.documentElement.classList.contains('light'))
+        document.documentElement.classList.remove('light')
       if (implicitPreference) setThemeState(implicitPreference)
     } else {
       setThemeState(themeToSet)
       window.localStorage.setItem(themeLocalStorageKey, themeToSet)
-      document.documentElement.setAttribute('data-theme', themeToSet)
+      if (themeToSet == 'dark') document.documentElement.classList.remove('light')
+      if (themeToSet == 'light') document.documentElement.classList.remove('dark')
+      document.documentElement.classList.add(themeToSet)
     }
   }, [])
 
@@ -47,7 +56,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
       }
     }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    document.documentElement.classList.add(themeToSet)
     setThemeState(themeToSet)
   }, [])
 

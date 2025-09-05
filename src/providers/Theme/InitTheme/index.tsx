@@ -39,7 +39,7 @@ export const InitTheme: React.FC = () => {
       }
     }
 
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    document.documentElement.classList.add(themeToSet)
   })();
   `,
       }}
