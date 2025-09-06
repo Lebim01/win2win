@@ -6,11 +6,10 @@ export const Admins: CollectionConfig = {
   auth: {
     verify: false,
     maxLoginAttempts: 10,
-    tokenExpiration: 60 * 60 * 24 * 7, // 7 días
+    tokenExpiration: 60 * 60 * 24 * 7,
   },
   admin: { useAsTitle: 'email' },
   access: {
-    // Solo un admin autenticado puede listar/leer/crear/editar/eliminar admins
     read: ({ req }) => !!req.user,
     create: ({ req }) => req.user?.collection === 'admins',
     update: ({ req }) => req.user?.collection === 'admins',

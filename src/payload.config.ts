@@ -86,7 +86,6 @@ export default buildConfig({
   email: nodemailerAdapter({
     defaultFromAddress: process.env.STMP_USER!,
     defaultFromName: 'Gibor',
-    // Nodemailer transportOptions
     transportOptions: {
       host: process.env.SMTP_HOST,
       port: 465,
@@ -96,6 +95,7 @@ export default buildConfig({
         pass: process.env.SMTP_PASS,
       },
     },
+    skipVerify: true,
   }),
   jobs: {
     access: {
