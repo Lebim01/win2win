@@ -2,7 +2,7 @@ import Graph from './graph'
 
 const Tree = () => {
   return (
-    <div>
+    <div className="max-w-screen overflow-auto">
       <Graph />
     </div>
   )
