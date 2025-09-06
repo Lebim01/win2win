@@ -1,16 +1,19 @@
 'use client'
 import useMe, { CustomerMe } from '@/hooks/useMe'
+import { getChild } from '@/services/referrals.service'
 import { useEffect, useState } from 'react'
 import { Tree } from 'tree-graph-react'
 import NodeMap from 'tree-graph-react/dist/interfaces/NodeMap'
 import 'tree-graph-react/dist/tree-graph-react.cjs.development.css'
 
-const getUserChildrens = (b: CustomerMe, depth: number, backObj: NodeMap) => {
+const getUserChildrens = async (b: CustomerMe, depth: number, backObj: NodeMap) => {
+  if (depth > 7) return
+
   backObj[b.id.toString()] = {
     _key: b.id.toString(),
-    father: (b.referredBy as CustomerMe)?.id?.toString() || b.referredBy?.toString(),
+    father: b.referredBy?.toString(),
     name: b.name || '',
-    sortList: b.children?.map((r) => r.id.toString()),
+    sortList: b.children?.map((id) => id.toString()),
     contract: depth > 1,
     childNum: b.childrenCount,
     showCheckbox: false,
@@ -31,8 +34,8 @@ const getUserChildrens = (b: CustomerMe, depth: number, backObj: NodeMap) => {
   }
   if (b?.children?.length > 0) {
     for (const c of b?.children) {
-      console.log({ c, depth })
-      getUserChildrens(c, depth + 1, backObj)
+      const child = await getChild(c)
+      getUserChildrens(child, depth + 1, backObj)
     }
   }
 }
@@ -44,8 +47,9 @@ const Graph = () => {
   useEffect(() => {
     if (user) {
       let response = {}
-      getUserChildrens(user, 0, response)
-      setNodes(response)
+      getUserChildrens(user, 0, response).then(() => {
+        setNodes(response)
+      })
     }
   }, [user?.id])
 

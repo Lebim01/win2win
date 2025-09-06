@@ -76,6 +76,7 @@ export default buildConfig({
     ...plugins,
     // storage-adapter-placeholder
   ],
+  defaultDepth: 0,
   secret: process.env.PAYLOAD_SECRET,
   sharp,
   typescript: {

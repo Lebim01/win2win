@@ -20,14 +20,13 @@ export type CustomerMe = {
   childrenCount?: number
   membership?: Membership
   referredCount?: number
-  promotions?: { id: string; title: string; description: string; cta?: string; href?: string }[]
-  children: CustomerMe[]
-  referredBy: CustomerMe | number
+  children: number[]
+  referredBy: number
 }
 
 // --- Data hooks (replace with your real fetchers) ---
 async function fetchMe(): Promise<CustomerMe> {
-  const res = await fetch('/api/me', { credentials: 'include' })
+  const res = await fetch(`/api/me`, { credentials: 'include' })
   if (!res.ok) throw new Error('Failed to load user')
   return res.json()
 }

@@ -29,7 +29,9 @@ const SignIn = () => {
 
     const result = await response.json()
 
-    router.push('/dashboard')
+    console.log(result)
+
+    //router.push('/dashboard')
   }
 
   return (

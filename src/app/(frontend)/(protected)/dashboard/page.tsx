@@ -181,42 +181,7 @@ export default function Dashboard() {
           <div className="font-semibold">Promociones</div>
         </CardHeader>
         <Divider />
-        <CardBody className="grid gap-3 md:grid-cols-2">
-          {(me.promotions?.length
-            ? me.promotions
-            : [
-                {
-                  id: 'p1',
-                  title: 'Comparte 5 cupones de bienvenida',
-                  description: 'Entrega cupones de $24.99 a tus 5 primeros referidos.',
-                  cta: 'Generar cupones',
-                  href: '/coupons',
-                },
-                {
-                  id: 'p2',
-                  title: 'Bonus por activación temprana',
-                  description: 'Renueva antes de vencer y conserva tus días.',
-                  cta: 'Renovar ahora',
-                  href: '/dashboard',
-                },
-              ]
-          ).map((p) => (
-            <div
-              key={p.id}
-              className="p-3 rounded-medium border border-default-100 flex items-start gap-3"
-            >
-              <div className="flex-1">
-                <div className="font-medium">{p.title}</div>
-                <div className="text-sm opacity-80">{p.description}</div>
-              </div>
-              {p.href && (
-                <Button as={Link} href={p.href} size="sm" color="secondary" variant="flat">
-                  {p.cta || 'Ver'}
-                </Button>
-              )}
-            </div>
-          ))}
-        </CardBody>
+        <CardBody className="grid gap-3 md:grid-cols-2"></CardBody>
       </Card>
 
       {/* Tabs: Activity / Details */}

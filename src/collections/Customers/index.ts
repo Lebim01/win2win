@@ -3,6 +3,7 @@ import { hookAssignSponsorFromInviterCode } from './hooks'
 import { activete } from '@/business/memberships'
 import { redeemCouponAtomically } from '@/business/coupons'
 import { Coupon } from '@/payload-types'
+import { owner } from '@/access/owner'
 
 export const Customers: CollectionConfig = {
   slug: 'customers',
