@@ -39,7 +39,12 @@ export const InitTheme: React.FC = () => {
       }
     }
 
+    if (document.documentElement.classList.contains('dark'))
+      document.documentElement.classList.remove('dark')
+    if (document.documentElement.classList.contains('light'))
+      document.documentElement.classList.remove('light')
     document.documentElement.classList.add(themeToSet)
+    
   })();
   `,
       }}

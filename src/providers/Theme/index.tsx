@@ -28,16 +28,20 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     if (themeToSet === null) {
       window.localStorage.removeItem(themeLocalStorageKey)
       const implicitPreference = getImplicitPreference()
+      if (implicitPreference) {
+        if (document.documentElement.classList.contains('dark'))
+          document.documentElement.classList.remove('dark')
+        if (document.documentElement.classList.contains('light'))
+          document.documentElement.classList.remove('light')
+        setThemeState(implicitPreference)
+      }
+    } else {
+      setThemeState(themeToSet)
+      window.localStorage.setItem(themeLocalStorageKey, themeToSet)
       if (document.documentElement.classList.contains('dark'))
         document.documentElement.classList.remove('dark')
       if (document.documentElement.classList.contains('light'))
         document.documentElement.classList.remove('light')
-      if (implicitPreference) setThemeState(implicitPreference)
-    } else {
-      setThemeState(themeToSet)
-      window.localStorage.setItem(themeLocalStorageKey, themeToSet)
-      if (themeToSet == 'dark') document.documentElement.classList.remove('light')
-      if (themeToSet == 'light') document.documentElement.classList.remove('dark')
       document.documentElement.classList.add(themeToSet)
     }
   }, [])

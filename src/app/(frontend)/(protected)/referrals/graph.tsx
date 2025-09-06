@@ -1,6 +1,6 @@
 'use client'
 import useMe, { CustomerMe } from '@/hooks/useMe'
-import { getChild } from '@/services/referrals.service'
+import { getChild, getTree } from '@/services/referrals.service'
 import { useEffect, useState } from 'react'
 import { Tree } from 'tree-graph-react'
 import NodeMap from 'tree-graph-react/dist/interfaces/NodeMap'
@@ -29,7 +29,7 @@ const getUserChildrens = async (b: CustomerMe, depth: number, backObj: NodeMap) 
             color: '#fff',
           }
       : {
-          backgroundColor: '#ddd',
+          backgroundColor: 'rgb(62 62 62)',
         }),
   }
   if (b?.children?.length > 0) {
@@ -46,9 +46,38 @@ const Graph = () => {
 
   useEffect(() => {
     if (user) {
-      let response = {}
-      getUserChildrens(user, 0, response).then(() => {
-        setNodes(response)
+      getTree().then((response) => {
+        setNodes(
+          response.reduce((a, b, index, arr) => {
+            a[b.user_id.toString()] = {
+              _key: b.user_id.toString(),
+              father: b.parent_id?.toString() || '',
+              name: b.display_name || '',
+              sortList: arr
+                .filter((dd) => dd.parent_id == b.user_id)
+                .map((dd) => dd.user_id.toString()),
+              contract: b.depth > 1,
+              childNum: arr.filter((dd) => dd.path.includes(b.user_id) && dd.user_id != b.user_id)
+                .length,
+              showCheckbox: false,
+              showStatus: false,
+              ...(b.depth > 0
+                ? b.membership_is_active
+                  ? {
+                      backgroundColor: '#5a8555',
+                      color: '#fff',
+                    }
+                  : {
+                      backgroundColor: '#8a5e5e',
+                      color: '#fff',
+                    }
+                : {
+                    backgroundColor: 'rgb(62 62 62)',
+                  }),
+            }
+            return a
+          }, {} as NodeMap),
+        )
       })
     }
   }, [user?.id])

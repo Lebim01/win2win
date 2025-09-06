@@ -42,7 +42,6 @@ function formatCurrency(v: number | undefined, currency = 'USD') {
 export default function Dashboard() {
   const { data: me, loading, error, refresh } = useMe()
   const [coupon, setCoupon] = useState('')
-  const [busy, setBusy] = useState(false)
 
   const remaining = useMemo(
     () => diffNow(me?.membership?.currentPeriodEnd),
@@ -117,7 +116,7 @@ export default function Dashboard() {
                   placeholder="ABC123"
                   className="max-w-xs"
                 />
-                <Button color={isActive ? 'warning' : 'primary'} isLoading={busy}>
+                <Button color={isActive ? 'warning' : 'primary'}>
                   {isActive ? 'Renovar' : 'Activar membresía'}
                 </Button>
               </>
@@ -178,7 +177,7 @@ export default function Dashboard() {
       {/* Promotions & activity */}
       <Card shadow="sm">
         <CardHeader>
-          <div className="font-semibold">Promociones</div>
+          <div className="font-semibold">Cupones</div>
         </CardHeader>
         <Divider />
         <CardBody className="grid gap-3 md:grid-cols-2"></CardBody>

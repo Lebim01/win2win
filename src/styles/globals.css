@@ -5,14 +5,23 @@
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme {
-  --color-bg: #ffffff;
-  --color-fg: #0f172a;
-  --color-card: #ffffff;
-  --color-primary: #2563eb;
-  --color-border: #e5e7eb;
+  --color-bg: #f8fafc; /* gris azulado muy claro, fondo general */
+  --color-fg: #1e293b; /* gris-azul oscuro, texto principal */
+  --color-card: #ffffff; /* tarjetas sobre el fondo gris, aún con un poco de blanco */
+  --color-primary: #2563eb; /* azul principal */
+  --color-border: #cbd5e1; /* borde gris claro */
+  --color-muted: #e2e8f0; /* fondos sutiles para inputs o secciones */
 }
 
-/* === Overrides Dark cuando html[data-theme="dark"] === */
+html {
+  --color-bg: #f8fafc; /* gris azulado muy claro, fondo general */
+  --color-fg: #1e293b; /* gris-azul oscuro, texto principal */
+  --color-card: #ffffff; /* tarjetas sobre el fondo gris, aún con un poco de blanco */
+  --color-primary: #2563eb; /* azul principal */
+  --color-border: #cbd5e1; /* borde gris claro */
+  --color-muted: #e2e8f0; /* fondos sutiles para inputs o secciones */
+}
+
 html.dark {
   --color-bg: #0e1524;
   --color-fg: #e5e7eb;
@@ -23,10 +32,9 @@ html.dark {
 }
 
 html {
-  transition:
-    color 0.2s ease,
-    background-color 0.2s ease;
-  opacity: 0;
+  opacity: 1;
+  background-color: var(--color-bg);
+  color: var(--color-fg);
 }
 
 html.dark {
@@ -44,6 +52,6 @@ body {
   display: none;
 }
 
-.svg-wrapper>svg {
+.svg-wrapper > svg {
   @apply mx-auto;
 }

@@ -1,0 +1,51 @@
+export type Money = number // en USD u otra moneda; adapta según tu configuración
+
+export type BalanceSummary = {
+  available: Money
+  pending: Money
+  lifetimeEarned: Money
+  lastPayoutAt?: string // ISO date
+  currency: string // "USD", "MXN", etc.
+}
+
+export type WithdrawalRow = {
+  id: string
+  date: string // ISO
+  amount: Money
+  method: 'USDT' | 'Bank' | 'PayPal' | 'Other'
+  status: 'processing' | 'paid' | 'failed' | 'canceled'
+  reference?: string // txid, folio
+}
+
+export type CutRow = {
+  id: string
+  month: string // AAAA-MM
+  from: string // ISO inicio de corte
+  to: string // ISO fin de corte
+  commissionsTotal: Money
+  withdrawalsTotal: Money
+  adjustments?: Money
+  net?: Money // calculado si no viene
+  status: 'open' | 'closed' | 'paid'
+  receiptUrl?: string
+}
+
+export type WalletProps = {
+  balance: BalanceSummary
+  trend?: { date: string; amount: Money }[] // para la gráfica (últimos 12 meses)
+  commissions: CommissionRow[]
+  withdrawals: WithdrawalRow[]
+  cuts: CutRow[]
+  onRequestWithdraw?: () => void // hook al flujo de retiro
+  onRefresh?: () => void // recargar datos
+}
+
+export type CommissionRow = {
+  id: string
+  date: string // ISO
+  level: number // nivel 1..7
+  sourceUser: string // displayName o email parcial
+  amount: Money
+  period: string // AAAA-MM
+  status: 'accrued' | 'paid' | 'reversed'
+}
