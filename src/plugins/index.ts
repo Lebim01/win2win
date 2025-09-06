@@ -6,6 +6,7 @@ import { Plugin } from 'payload'
 import { revalidateRedirects } from '@/hooks/revalidateRedirects'
 import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import { gcsStorage } from '@payloadcms/storage-gcs'
 
 import { Page } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -74,4 +75,20 @@ export const plugins: Plugin[] = [
     },
   }),
   payloadCloudPlugin(),
+  gcsStorage({
+    enabled: true,
+    collections: {
+      media: true,
+    },
+    bucket: process.env.GCS_BUCKET as string,
+    options: {
+      apiEndpoint: process.env.GCS_ENDPOINT,
+      projectId: process.env.GCS_PROJECT_ID,
+      credentials: {
+        client_email: process.env.GCS_CLIENT_EMAIL,
+        private_key: process.env.GCS_PRIVATE_KEY!.replace(/\\n/g, '\n'),
+      },
+    },
+    acl: 'Public',
+  }),
 ]
