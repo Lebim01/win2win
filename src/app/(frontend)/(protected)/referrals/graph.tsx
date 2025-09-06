@@ -15,6 +15,19 @@ const getUserChildrens = (b: CustomerMe, depth: number, backObj: NodeMap) => {
     childNum: b.childrenCount,
     showCheckbox: false,
     showStatus: false,
+    ...(depth > 0
+      ? b.membership?.isActive
+        ? {
+            backgroundColor: '#5a8555',
+            color: '#fff',
+          }
+        : {
+            backgroundColor: '#8a5e5e',
+            color: '#fff',
+          }
+      : {
+          backgroundColor: '#ddd',
+        }),
   }
   if (b?.children?.length > 0) {
     for (const c of b?.children) {
