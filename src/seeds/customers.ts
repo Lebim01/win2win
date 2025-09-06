@@ -25,6 +25,7 @@ export const seedCustomers = async (payload: Payload) => {
       _verified: true,
       role: 'customer',
     },
+    disableVerificationEmail: true,
   })
 
   // Helper recursivo BFS para crear hasta profundidad N
@@ -50,6 +51,7 @@ export const seedCustomers = async (payload: Payload) => {
           _verified: true,
           role: 'customer',
         },
+        disableVerificationEmail: true,
       })
 
       await createChildren(child, level + 1, maxDepth)
