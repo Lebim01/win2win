@@ -1,0 +1,42 @@
+'use client'
+import useMe, { CustomerMe } from '@/hooks/useMe'
+import { useEffect, useState } from 'react'
+import { Tree } from 'tree-graph-react'
+import NodeMap from 'tree-graph-react/dist/interfaces/NodeMap'
+import 'tree-graph-react/dist/tree-graph-react.cjs.development.css'
+
+const getUserChildrens = (b: CustomerMe, depth: number, backObj: NodeMap) => {
+  backObj[b.id.toString()] = {
+    _key: b.id.toString(),
+    father: (b.referredBy as CustomerMe)?.id?.toString() || b.referredBy?.toString(),
+    name: b.name || '',
+    sortList: b.children?.map((r) => r.id.toString()),
+    contract: depth > 1,
+    childNum: b.childrenCount,
+    showCheckbox: false,
+    showStatus: false,
+  }
+  if (b?.children?.length > 0) {
+    for (const c of b?.children) {
+      console.log({ c, depth })
+      getUserChildrens(c, depth + 1, backObj)
+    }
+  }
+}
+
+const Graph = () => {
+  const { data: user } = useMe()
+  const [nodes, setNodes] = useState<NodeMap>({})
+
+  useEffect(() => {
+    if (user) {
+      let response = {}
+      getUserChildrens(user, 0, response)
+      setNodes(response)
+    }
+  }, [user?.id])
+
+  return <Tree nodes={nodes} startId={user?.id.toString() || ''} disableShortcut disabled />
+}
+
+export default Graph

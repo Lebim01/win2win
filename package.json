@@ -68,6 +68,7 @@
     "sharp": "0.34.2",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7",
+    "tree-graph-react": "^2.4.7",
     "zod": "^4.1.5"
   },
   "devDependencies": {
