@@ -1,8 +1,14 @@
-import payload from 'payload'
+import payload, { BasePayload, PayloadRequest } from 'payload'
 import { seedCustomers } from './customers'
 import payloadConfig from '@payload-config'
 
-const run = async () => {
+export const seed = async ({
+  payload,
+  req: payloadReq,
+}: {
+  payload: BasePayload
+  req: PayloadRequest
+}) => {
   await payload.init({
     config: payloadConfig,
   })
@@ -13,8 +19,3 @@ const run = async () => {
 
   process.exit(0)
 }
-
-run().catch((err) => {
-  console.error(err)
-  process.exit(1)
-})

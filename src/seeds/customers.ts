@@ -14,7 +14,7 @@ export const seedCustomers = async (payload: Payload) => {
     collection: 'customers',
     data: {
       email: 'root@example.com',
-      password: 'Leafitome10.',
+      password: '11111111',
       name: 'Root User',
       referralCode: rootReferralCode,
       level: 0,
