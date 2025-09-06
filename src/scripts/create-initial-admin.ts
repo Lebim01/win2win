@@ -24,7 +24,7 @@ export async function ensureRootAdmin(payload: Payload) {
       collection: 'admins',
       data: {
         email,
-        password, // Payload hashea automáticamente al ser colección con auth
+        password,
         name,
         role: 'admin',
         _verified: true,
@@ -33,6 +33,7 @@ export async function ensureRootAdmin(payload: Payload) {
         collection: 'admins',
         roles: 'admins',
       },
+      disableVerificationEmail: true,
     })
 
     payload.logger.info(`✓ Admin inicial creado: ${email}`)

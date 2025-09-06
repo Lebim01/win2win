@@ -4,8 +4,7 @@ export const Admins: CollectionConfig = {
   slug: 'admins',
   labels: { singular: 'Admin', plural: 'Admins' },
   auth: {
-    // Opcional: verificación por correo para admins
-    verify: true,
+    verify: false,
     maxLoginAttempts: 10,
     tokenExpiration: 60 * 60 * 24 * 7, // 7 días
   },
