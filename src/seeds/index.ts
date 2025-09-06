@@ -1,14 +1,8 @@
-import payload, { BasePayload, PayloadRequest } from 'payload'
+import { BasePayload } from 'payload'
 import { seedCustomers } from './customers'
 import payloadConfig from '@payload-config'
 
-export const seed = async ({
-  payload,
-  req: payloadReq,
-}: {
-  payload: BasePayload
-  req: PayloadRequest
-}) => {
+export const seed = async ({ payload }: { payload: BasePayload }) => {
   await payload.init({
     config: payloadConfig,
   })
