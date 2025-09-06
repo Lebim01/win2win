@@ -8,6 +8,7 @@ import type { Header } from '@/payload-types'
 
 import { Logo } from '@/components/Logo/Logo'
 import { HeaderNav } from './Nav'
+import ProfileDropdown from './Nav/ProfileDropdown'
 
 interface HeaderClientProps {
   data: Header
@@ -36,7 +37,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
           <Link href="/dashboard">
             <Logo loading="eager" priority="high" />
           </Link>
-          <HeaderNav data={data} />
+          <div className="flex gap-4">
+            <HeaderNav data={data} />
+            <ProfileDropdown />
+          </div>
         </div>
       </header>
     </div>
