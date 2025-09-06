@@ -216,6 +216,7 @@ export const Customers: CollectionConfig = {
               equals: false,
             },
           },
+          limit: 1000,
           sort: 'id',
         })
 

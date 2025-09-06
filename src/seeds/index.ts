@@ -7,6 +7,4 @@ export const seed = async ({ payload }: { payload: BasePayload }) => {
   await ensureRootAdmin(payload)
   await seedCustomers(payload)
   console.log('✅ Seed completado')
-
-  process.exit(0)
 }
