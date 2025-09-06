@@ -76,7 +76,7 @@ const downloadBlob = (content: string, filename: string, type = 'text/csv;charse
 }
 
 // -- Componente principal
-export function WalletPage(props: WalletProps) {
+function WalletPage(props: WalletProps) {
   const {
     balance,
     trend = [],
