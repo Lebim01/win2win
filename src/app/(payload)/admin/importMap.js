@@ -18,6 +18,7 @@ import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from 
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
 import { RowLabel as RowLabel_1f6ff6ff633e3695d348f4f3c58f1466 } from '@/Footer/RowLabel'
 import { default as default_be986084d3984e4e15831a98e5dc7426 } from '@/components/AdminSidemenu'
+import { GcsClientUploadHandler as GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934 } from '@payloadcms/storage-gcs/client'
 import { default as default_67024b737550b4cc9dceabd58987443c } from '@/views/Dashboard'
 
 export const importMap = {
@@ -41,5 +42,6 @@ export const importMap = {
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,
   "@/Footer/RowLabel#RowLabel": RowLabel_1f6ff6ff633e3695d348f4f3c58f1466,
   "@/components/AdminSidemenu#default": default_be986084d3984e4e15831a98e5dc7426,
+  "@payloadcms/storage-gcs/client#GcsClientUploadHandler": GcsClientUploadHandler_06e62ca02c7c441053a9b643e5545934,
   "@/views/Dashboard#default": default_67024b737550b4cc9dceabd58987443c
 }
