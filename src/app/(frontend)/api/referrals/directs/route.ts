@@ -20,6 +20,21 @@ export async function GET(req: NextRequest) {
       }
     }
 
+    if (searchParams.has('search') && searchParams.get('search')) {
+      addWhere.OR = [
+        {
+          name: {
+            contains: searchParams.get('search'),
+          },
+        },
+        {
+          email: {
+            contains: searchParams.get('search'),
+          },
+        },
+      ]
+    }
+
     const query = await payload.find({
       collection: 'customers',
       where: {

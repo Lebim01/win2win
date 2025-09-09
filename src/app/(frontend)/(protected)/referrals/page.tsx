@@ -20,7 +20,7 @@ import {
 } from '@heroui/react'
 import Graph from './graph'
 import { Filter } from 'lucide-react'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAxios } from 'use-axios-client'
 
 const Label = ({ children }: any) => <p className="font-medium mb-1">{children}</p>
@@ -28,6 +28,7 @@ const Label = ({ children }: any) => <p className="font-medium mb-1">{children}<
 const Tree = () => {
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState<string>('')
+  const [search, setSearch] = useState<string>('')
 
   const { data: directs } = useAxios<{
     docs: any[]
@@ -38,8 +39,13 @@ const Tree = () => {
     params: {
       page,
       status,
+      search,
     },
   })
+
+  useEffect(() => {
+    setPage(1)
+  }, [search, status])
 
   return (
     <div className="container mx-auto py-6" suppressHydrationWarning>
@@ -53,7 +59,10 @@ const Tree = () => {
               <div className="grid gap-3 md:grid-cols-3 px-4">
                 <div className="space-y-1">
                   <Label>Búsqueda</Label>
-                  <Input placeholder="Buscar por usuario o ID" />
+                  <Input
+                    placeholder="Buscar por usuario"
+                    onChange={(e) => setSearch(e.target.value)}
+                  />
                 </div>
                 <div className="space-y-1">
                   <Label>Estado</Label>
