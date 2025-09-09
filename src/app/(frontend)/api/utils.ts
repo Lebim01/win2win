@@ -3,6 +3,8 @@ import { BasePayload } from 'payload'
 import { headers as getHeaders } from 'next/headers'
 import { Customer } from '@/payload-types'
 
+type CustomerWCollection = Customer & { collection: 'customers' }
+
 type CustomerMe = Omit<
   Customer,
   | 'ancestors'
@@ -27,7 +29,7 @@ const safeUser = ({
   collection,
   inviterCode,
   ...user
-}: Customer & { collection: 'customers' }): CustomerMe => {
+}: CustomerWCollection): CustomerMe => {
   return user
 }
 
@@ -58,6 +60,6 @@ export const getLoggedUser = async (
   }
 
   return {
-    user: safeUser(user as Customer),
+    user: safeUser(user as CustomerWCollection),
   }
 }
