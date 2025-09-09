@@ -15,10 +15,11 @@ import {
   TableCell,
   Chip,
   Snippet,
+  Button,
 } from '@heroui/react'
-import { Filter } from 'lucide-react'
+import { Filter, RefreshCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { useAxios } from 'use-axios-client'
+import { getDirects, ResponseDirects } from '@/services/referrals.service'
 
 const Label = ({ children }: any) => <p className="font-medium mb-1">{children}</p>
 
@@ -26,40 +27,53 @@ const TableDirects = () => {
   const [page, setPage] = useState(1)
   const [status, setStatus] = useState<string>('')
   const [search, setSearch] = useState<string>('')
-
-  const { data: directs } = useAxios<{
-    docs: any[]
-    totalDocs: number
-    totalPages: number
-  }>({
-    url: '/api/referrals/directs',
-    params: {
-      page,
-      status,
-      search,
-    },
+  const [loading, setLoading] = useState(true)
+  const [directs, setDirects] = useState<ResponseDirects>({
+    totalPages: 0,
+    totalDocs: 0,
+    docs: [],
   })
 
+  const refetch = async () => {
+    setLoading(true)
+    const response = await getDirects(page, status, search)
+    setDirects(response)
+    setLoading(false)
+  }
+
   useEffect(() => {
-    setPage(1)
-  }, [search, status])
+    refetch()
+  }, [search, page, status])
 
   return (
     <Card radius="sm">
-      <CardHeader className="pb-2">
+      <CardHeader className="pb-2 flex justify-between">
         <span className="text-base font-medium">Base de datos de directos</span>
+        <Button onPress={refetch} isLoading={loading} size="sm">
+          {!loading && <RefreshCcw className="h-4 w-4 mr-2" />}
+          Actualizar
+        </Button>
       </CardHeader>
       <CardBody className="space-y-3">
         <div className="grid gap-3 md:grid-cols-3 px-4">
           <div className="space-y-1">
             <Label>Búsqueda</Label>
-            <Input placeholder="Buscar por usuario" onChange={(e) => setSearch(e.target.value)} />
+            <Input
+              placeholder="Buscar por usuario"
+              onChange={(e) => {
+                setPage(1)
+                setSearch(e.target.value)
+              }}
+            />
           </div>
           <div className="space-y-1">
             <Label>Estado</Label>
             <Select
               placeholder="Seleccionar"
-              onSelectionChange={(keys) => setStatus(keys.currentKey as string)}
+              onSelectionChange={(keys) => {
+                setPage(1)
+                setStatus(keys.currentKey as string)
+              }}
             >
               <SelectItem key="">Todos</SelectItem>
               <SelectItem key="active">Activo</SelectItem>
@@ -99,12 +113,12 @@ const TableDirects = () => {
               <TableColumn>Estado</TableColumn>
             </TableHeader>
             <TableBody emptyContent={'Sin registros.'}>
-              {(directs?.docs || []).map((c) => (
+              {directs.docs.map((c) => (
                 <TableRow key={c.id}>
                   <TableCell>{c.name}</TableCell>
                   <TableCell>{c.email}</TableCell>
                   <TableCell>
-                    {c.membership.firstActivatedAt && (
+                    {c.membership?.firstActivatedAt && (
                       <>
                         <Snippet symbol="" hideCopyButton size="sm">
                           {c.membership?.currentPeriodStart

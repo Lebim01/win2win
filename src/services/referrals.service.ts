@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export const getChild = async (id: number) => {
   const res = await fetch(`/api/get-child/${id}`, { credentials: 'include' })
   return await res.json()
@@ -15,4 +17,32 @@ export const getTree = async (): Promise<
 > => {
   const res = await fetch(`/api/referrals/referral-tree`, { credentials: 'include' })
   return await res.json()
+}
+
+export type ResponseDirects = {
+  totalPages: 0
+  totalDocs: 0
+  docs: {
+    id: number
+    name: string
+    email: string
+    membership: {
+      isActive: boolean
+      currentPeriodEnd: string | null
+      currentPeriodStart: string | null
+      firstActivatedAt: string | null
+    }
+  }[]
+}
+
+export const getDirects = async (page = 1, status = '', search = ''): Promise<ResponseDirects> => {
+  const res = await axios(`/api/referrals/directs`, {
+    withCredentials: true,
+    params: {
+      page,
+      status,
+      search,
+    },
+  })
+  return await res.data
 }

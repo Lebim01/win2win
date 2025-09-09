@@ -36,10 +36,10 @@ import { StatusBadge } from './components/StatusBadge'
 import { WithdrawalBadge } from './components/WithdrawalBadge'
 import { DemoLoading } from '@/components/LoadingScreen'
 import { CardTitle } from '@/components/ui/card'
-import { useAxios } from 'use-axios-client'
 import useMe from '@/hooks/useMe'
 import { PaginatedDocs } from 'payload'
 import { Customer, ReferralPayout } from '@/payload-types'
+import useAxios from '@/hooks/useAxios'
 
 const fmtCurrency = (n: Money, currency: string) =>
   new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(n)
@@ -360,20 +360,22 @@ function WalletPage(props: WalletProps) {
   )
 }
 
-// -- Mock de ejemplo para ver en el canvas (elimina cuando conectes API)
 export default function DemoWallet() {
   const [page, setPage] = useState(1)
   const [level, setLevel] = useState<string | null>(null)
 
   const { data: user, loading: loadingUser } = useMe()
 
-  const { data: history } = useAxios<PaginatedDocs<ReferralPayout>>({
-    url: '/api/comissions/history',
-    params: {
-      page,
-      level,
+  const { data: history } = useAxios<PaginatedDocs<ReferralPayout>>(
+    {
+      url: '/api/comissions/history',
+      params: {
+        page,
+        level,
+      },
     },
-  })
+    [page, level],
+  )
 
   const { data: trend, loading: loadingTrend } = useAxios<
     {

@@ -47,6 +47,13 @@ export async function GET(req: NextRequest) {
       page: searchParams.has('page') ? Number(searchParams.get('page')) : 1,
       limit: 10,
       sort: '-createdAt',
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        membership: true,
+        createdAt: true,
+      },
     })
 
     return NextResponse.json({

@@ -3,7 +3,33 @@ import { BasePayload } from 'payload'
 import { headers as getHeaders } from 'next/headers'
 import { Customer } from '@/payload-types'
 
-type CustomerMe = Customer & { collection: 'customers' }
+type CustomerMe = Omit<
+  Customer,
+  | 'ancestors'
+  | 'placementLocked'
+  | 'sessions'
+  | 'level'
+  | 'membershipHistory'
+  | 'role'
+  | 'updatedAt'
+  | 'collection'
+  | 'inviterCode'
+>
+
+const safeUser = ({
+  ancestors,
+  placementLocked,
+  sessions,
+  level,
+  membershipHistory,
+  role,
+  updatedAt,
+  collection,
+  inviterCode,
+  ...user
+}: Customer & { collection: 'customers' }): CustomerMe => {
+  return user
+}
 
 export const getLoggedUser = async (
   payload: BasePayload,
@@ -23,6 +49,7 @@ export const getLoggedUser = async (
   const { user } = await payload.auth({
     headers: await getHeaders(),
   })
+
   if (!user) {
     return {
       user: null,
@@ -31,6 +58,6 @@ export const getLoggedUser = async (
   }
 
   return {
-    user: user as CustomerMe,
+    user: safeUser(user as Customer),
   }
 }
