@@ -95,7 +95,7 @@ function WalletPage(props: WalletProps) {
   const [search, setSearch] = useState('')
 
   return (
-    <div className="container mx-auto px-4 py-6 space-y-6" suppressHydrationWarning>
+    <div className="container mx-auto px-4 md:px-0 py-6 space-y-6" suppressHydrationWarning>
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
@@ -266,6 +266,7 @@ function WalletPage(props: WalletProps) {
                 <Table
                   radius="sm"
                   shadow="none"
+                  isStriped
                   bottomContent={
                     <div className="flex w-full justify-center">
                       <Pagination
@@ -329,7 +330,7 @@ function WalletPage(props: WalletProps) {
                 </Button>
               </div>
               <div className="overflow-x-auto">
-                <Table shadow="none" radius="sm">
+                <Table shadow="none" radius="sm" isStriped>
                   <TableHeader>
                     <TableColumn>Fecha</TableColumn>
                     <TableColumn>Método</TableColumn>

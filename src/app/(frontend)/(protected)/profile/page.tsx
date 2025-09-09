@@ -1,15 +1,16 @@
 'use client'
 import React from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, Divider } from '@heroui/react'
+
+import { Avatar, Card, CardBody, CardHeader, Divider } from '@heroui/react'
 import { Mail, Phone, User as UserIcon } from 'lucide-react'
 import { changePassword } from '@/services/profile.service'
 import { Profile, ProfileForm, ProfilePageProps } from './components/ProfileForm'
 import { PasswordForm } from './components/PasswordForm'
+import { CardTitle } from '@/components/ui/card'
 
 function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePageProps) {
   return (
-    <div className="container mx-auto px-4 py-6 space-y-6">
+    <div className="container mx-auto px-4 md:px-0 py-6 space-y-6">
       <header className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
           <UserIcon className="h-6 w-6" /> Perfil
@@ -22,7 +23,7 @@ function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePagePr
           <CardHeader className="pb-2">
             <CardTitle className="text-base font-medium">Información básica</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardBody>
             <div className="flex items-center gap-4">
               <Avatar
                 className="h-16 w-16"
@@ -51,7 +52,7 @@ function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePagePr
               Mantén tus datos actualizados para recibir notificaciones sobre comisiones, retiros y
               cortes mensuales.
             </p>
-          </CardContent>
+          </CardBody>
         </Card>
 
         {/* Columna derecha: formularios */}

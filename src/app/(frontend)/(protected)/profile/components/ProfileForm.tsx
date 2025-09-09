@@ -2,9 +2,9 @@ import { PasswordValues } from './PasswordForm'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label'
-import { Button, Input } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader, Input } from '@heroui/react'
 import { Mail, Phone } from 'lucide-react'
 
 // --------- Tipos ---------
@@ -66,7 +66,7 @@ export function ProfileForm({
       <CardHeader className="pb-2">
         <CardTitle className="text-base font-medium">Editar información</CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardBody className="space-y-4">
         <div className="grid gap-4 md:grid-cols-2">
           <div className="space-y-1">
             <Label htmlFor="name">Nombre</Label>
@@ -101,9 +101,14 @@ export function ProfileForm({
             {errors.phone && <p className="text-xs text-destructive">{errors.phone.message}</p>}
           </div>
         </div>
-      </CardContent>
+      </CardBody>
       <CardFooter className="flex justify-end gap-2">
-        <Button type="submit" disabled={isSubmitting || !isDirty} onClick={handleSubmit(onSubmit)}>
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isDirty}
+          color={isDirty ? 'primary' : 'default'}
+          onClick={handleSubmit(onSubmit)}
+        >
           {isSubmitting ? 'Guardando...' : 'Guardar cambios'}
         </Button>
       </CardFooter>

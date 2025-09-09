@@ -93,6 +93,7 @@ const TableDirects = () => {
             aria-label="Directos"
             radius="sm"
             shadow="none"
+            isStriped
             bottomContent={
               <div className="flex w-full justify-center">
                 <Pagination

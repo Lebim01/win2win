@@ -2,11 +2,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card'
+import { CardTitle } from '@/components/ui/card'
 import { KeyRound } from 'lucide-react'
 import { PasswordInput } from './PasswordInput'
 import { PasswordStrength } from './PasswordStrength'
-import { Button } from '@heroui/react'
+import { Button, Card, CardBody, CardFooter, CardHeader } from '@heroui/react'
 
 const PasswordSchema = z
   .object({
@@ -61,7 +61,7 @@ export function PasswordForm({
           Contraseña
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
+      <CardBody className="space-y-4">
         <div className="grid gap-4 md:grid-cols-2">
           <PasswordInput
             label="Contraseña actual"
@@ -98,9 +98,14 @@ export function PasswordForm({
           Recomendación: usa al menos 8 caracteres, combinando mayúsculas, minúsculas, números y
           símbolos.
         </p>
-      </CardContent>
+      </CardBody>
       <CardFooter className="flex justify-end">
-        <Button type="submit" disabled={isSubmitting || !isDirty} onClick={handleSubmit(onSubmit)}>
+        <Button
+          type="submit"
+          disabled={isSubmitting || !isDirty}
+          color={isDirty ? 'primary' : 'default'}
+          onClick={handleSubmit(onSubmit)}
+        >
           {isSubmitting ? 'Actualizando...' : 'Actualizar contraseña'}
         </Button>
       </CardFooter>
