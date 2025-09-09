@@ -71,7 +71,7 @@ export default function Dashboard() {
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
 
   return (
-    <div className="container mx-auto p-6 md:px-0 md:py-12 grid gap-4">
+    <div className="container mx-auto p-4 md:p-6 md:px-0 md:py-12 grid gap-4">
       <div className="flex items-center gap-3">
         <Avatar name={me.name || me.email} />
         <div>
