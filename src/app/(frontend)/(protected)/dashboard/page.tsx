@@ -21,6 +21,7 @@ import { diffNow } from '@/utilities/diffNow'
 import useMe from '@/hooks/useMe'
 import useCoupons from '@/hooks/useCoupons'
 import LoadingDashboard from './LoadingPage'
+import useAxios from '@/hooks/useAxios'
 
 // Coupons
 type Coupon = {
@@ -41,7 +42,7 @@ function formatCurrency(v: number | undefined, currency = 'USD') {
 }
 
 export default function Dashboard() {
-  const { data: me, loading, error, refresh } = useMe()
+  const { data: me, loading, error } = useMe()
   const [coupon, setCoupon] = useState('')
 
   const remaining = useMemo(
@@ -56,7 +57,17 @@ export default function Dashboard() {
     return `${base}/sign-up?ref=${me.referralCode}`
   }, [me?.referralCode])
 
-  if (loading) return <LoadingDashboard />
+  const { data, loading: loadingCoupons } = useAxios<{
+    expires_at: string
+    total: number
+    used: number
+  }>({
+    url: '/api/coupons/summary',
+  })
+
+  const remainingCoupons = useMemo(() => diffNow(data?.expires_at), [data?.expires_at])
+
+  if (loading || loadingCoupons) return <LoadingDashboard />
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
 
   return (
@@ -183,13 +194,43 @@ export default function Dashboard() {
       </div>
 
       {/* Promotions & activity */}
-      <Card shadow="sm">
-        <CardHeader>
-          <div className="font-semibold">Cupones</div>
-        </CardHeader>
-        <Divider />
-        <CardBody className="grid gap-3 md:grid-cols-2"></CardBody>
-      </Card>
+      {data!.total > 0 && (
+        <Card shadow="sm">
+          <CardHeader>
+            <div className="font-semibold">Cupones</div>
+          </CardHeader>
+          <Divider />
+          <CardBody className="flex flex-col text-sm">
+            <div className="grid grid-cols-2 gap-2 w-max">
+              <div>
+                <span className="whitespace-nowrap">Total de cupones:</span>
+              </div>
+              <div>
+                <span>{data?.total}</span>
+              </div>
+              <div>
+                <span className="whitespace-nowrap">Cupones usados:</span>
+              </div>
+              <div>
+                <span>{data?.used}</span>
+              </div>
+            </div>
+            <div className="mt-2">
+              <span className="text-xs mt-1 opacity-70">Usalos antes de:</span>
+              <Progress
+                aria-label="Tiempo restante"
+                value={remainingCoupons.pct}
+                className="max-w-full mt-1"
+              />
+              <div className="text-xs mt-1 opacity-70">
+                {remainingCoupons.expired
+                  ? 'Expirada'
+                  : `${remainingCoupons.days}d ${remainingCoupons.hours}h ${remainingCoupons.minutes}m restantes`}
+              </div>
+            </div>
+          </CardBody>
+        </Card>
+      )}
 
       {/* Tabs: Activity / Details */}
       <Card shadow="sm">

@@ -33,7 +33,7 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   return (
     <div className="w-full bg-[var(--color-primary)] dark:bg-card border-b border-[var(--color-border)] shadow">
       <header className="container relative z-20 mx-auto">
-        <div className="py-8 flex justify-between text-white">
+        <div className="flex justify-between text-white py-4">
           <Link href="/dashboard">
             <Logo loading="eager" priority="high" />
           </Link>
