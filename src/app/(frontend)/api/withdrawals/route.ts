@@ -1,6 +1,6 @@
 import payloadConfig from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
-import { getPayload, Where } from 'payload'
+import { getPayload } from 'payload'
 import { getLoggedUser } from '../utils'
 
 export async function GET(req: NextRequest) {

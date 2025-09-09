@@ -1,19 +1,12 @@
+import { logout } from '@/services/auth.service'
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react'
 import { useRouter } from 'next/navigation'
 
 const ProfileDropdown = () => {
   const router = useRouter()
 
-  const logout = async () => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_SERVER_URL}/api/customers/logout?allSessions=false`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    )
+  const _logout = async () => {
+    await logout()
     router.replace('/sign-in')
   }
 
@@ -28,7 +21,7 @@ const ProfileDropdown = () => {
             Perfil
           </DropdownItem>
 
-          <DropdownItem key="delete" className="text-danger" color="danger" onPress={logout}>
+          <DropdownItem key="delete" className="text-danger" color="danger" onPress={_logout}>
             Cerrar Sesión
           </DropdownItem>
         </DropdownMenu>
