@@ -8,7 +8,7 @@ const ServicesIndicators = async (props: AdminViewServerProps) => {
     SELECT sum(amount) as total FROM service_charges WHERE status = 'pending'  
   `,
     )
-    .then((r) => r.rows[0])
+    .then((r: any) => r.rows[0])
 
   return (
     <Gutter className="grid grid-cols-3 pb-8 gap-4">
