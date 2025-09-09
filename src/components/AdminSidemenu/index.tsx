@@ -89,6 +89,17 @@ const AdminSidemenu = (props: any) => {
               <span>Reportes</span>
             </Button>
           </Link>
+
+          <Link href="/admin/collections/service-charges" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<BiSolidReport size={16} />}
+              iconPosition="left"
+            >
+              <span>Servicios</span>
+            </Button>
+          </Link>
         </div>
       </ListboxWrapper>
 

@@ -15,11 +15,11 @@ import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
 import { Admins } from './collections/Admins'
 import { Customers } from './collections/Customers/index'
-import { ensureRootAdmin } from './scripts/create-initial-admin'
 import { ReferralPayouts } from './collections/ReferralPayouts'
 import { Coupons } from './collections/Coupons'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Withdrawals } from './collections/Withdrawals'
+import ServiceCharges from './collections/ServiceCharges'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -71,7 +71,16 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Media, Admins, Customers, ReferralPayouts, Coupons, Withdrawals],
+  collections: [
+    Pages,
+    Media,
+    Admins,
+    Customers,
+    ReferralPayouts,
+    Coupons,
+    Withdrawals,
+    ServiceCharges,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [

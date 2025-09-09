@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/supabase",
+      "schedule": "0 7 9 * *"
+    },
+    {
+      "path": "/api/cron/vercel",
+      "schedule": "0 7 9 * *"
+    }
+  ]
+}

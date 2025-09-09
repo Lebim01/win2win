@@ -75,6 +75,7 @@ export interface Config {
     referral_payouts: ReferralPayout;
     coupons: Coupon;
     withdrawals: Withdrawal;
+    'service-charges': ServiceCharge;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -92,6 +93,7 @@ export interface Config {
     referral_payouts: ReferralPayoutsSelect<false> | ReferralPayoutsSelect<true>;
     coupons: CouponsSelect<false> | CouponsSelect<true>;
     withdrawals: WithdrawalsSelect<false> | WithdrawalsSelect<true>;
+    'service-charges': ServiceChargesSelect<false> | ServiceChargesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -807,6 +809,20 @@ export interface Withdrawal {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-charges".
+ */
+export interface ServiceCharge {
+  id: number;
+  service_name: string;
+  amount: number;
+  date: string;
+  currency?: string | null;
+  status: 'pending' | 'paid';
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -969,6 +985,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'withdrawals';
         value: number | Withdrawal;
+      } | null)
+    | ({
+        relationTo: 'service-charges';
+        value: number | ServiceCharge;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1382,6 +1402,19 @@ export interface WithdrawalsSelect<T extends boolean = true> {
   status?: T;
   method?: T;
   reference?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "service-charges_select".
+ */
+export interface ServiceChargesSelect<T extends boolean = true> {
+  service_name?: T;
+  amount?: T;
+  date?: T;
+  currency?: T;
+  status?: T;
   updatedAt?: T;
   createdAt?: T;
 }
