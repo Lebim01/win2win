@@ -33,11 +33,15 @@ export type CutRow = {
 export type WalletProps = {
   balance: BalanceSummary
   trend?: { date: string; amount: Money }[] // para la gráfica (últimos 12 meses)
-  commissions: CommissionRow[]
+  commissions: { docs: CommissionRow[]; totalDocs: number; totalPages: number }
   withdrawals: WithdrawalRow[]
   cuts: CutRow[]
   onRequestWithdraw?: () => void // hook al flujo de retiro
   onRefresh?: () => void // recargar datos
+  page: number
+  setPage: React.Dispatch<React.SetStateAction<number>>
+  level: string | null
+  setLevel: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 export type CommissionRow = {

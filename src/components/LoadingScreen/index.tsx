@@ -1,4 +1,5 @@
 'use client'
+import canUseDOM from '@/utilities/canUseDOM'
 import React from 'react'
 import { createPortal } from 'react-dom'
 
@@ -157,7 +158,7 @@ export function LoadingScreen({
     </div>
   )
 
-  return portal ? createPortal(content, document.body) : content
+  return portal && canUseDOM ? createPortal(content, document.body) : content
 }
 
 function TipRotator({ items, intervalMs = 2500 }: { items: string[]; intervalMs?: number }) {

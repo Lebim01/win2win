@@ -20,6 +20,7 @@ import {
 import { diffNow } from '@/utilities/diffNow'
 import useMe from '@/hooks/useMe'
 import useCoupons from '@/hooks/useCoupons'
+import LoadingDashboard from './LoadingPage'
 
 // Coupons
 type Coupon = {
@@ -55,7 +56,7 @@ export default function Dashboard() {
     return `${base}/sign-up?ref=${me.referralCode}`
   }, [me?.referralCode])
 
-  if (loading) return <div className="p-6">Cargando…</div>
+  if (loading) return <LoadingDashboard />
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
 
   return (
@@ -137,7 +138,14 @@ export default function Dashboard() {
             </Chip>
           </CardHeader>
           <CardBody className="gap-3">
-            <Snippet symbol="" codeString={referralLink} className="w-full">
+            <Snippet
+              symbol=""
+              codeString={referralLink}
+              className="w-full"
+              classNames={{
+                pre: 'line-clamp-1 overflow-auto',
+              }}
+            >
               {referralLink || 'Genera tu código'}
             </Snippet>
             <div className="text-sm opacity-70">
@@ -190,20 +198,18 @@ export default function Dashboard() {
             <Tab key="membership" title="Detalles de membresía">
               <div className="grid gap-2 text-sm">
                 <div>
-                  Primer activación:{' '}
-                  {me.membership?.firstActivatedAt
-                    ? new Date(me.membership.firstActivatedAt).toLocaleString()
-                    : '—'}
-                </div>
-                <div>
                   Periodo actual:{' '}
-                  {me.membership?.currentPeriodStart
-                    ? new Date(me.membership.currentPeriodStart).toLocaleString()
-                    : '—'}{' '}
+                  <Snippet symbol="" hideCopyButton size="sm">
+                    {me.membership?.currentPeriodStart
+                      ? new Date(me.membership.currentPeriodStart).toLocaleString()
+                      : '—'}
+                  </Snippet>{' '}
                   →{' '}
-                  {me.membership?.currentPeriodEnd
-                    ? new Date(me.membership.currentPeriodEnd).toLocaleString()
-                    : '—'}
+                  <Snippet symbol="" hideCopyButton size="sm">
+                    {me.membership?.currentPeriodEnd
+                      ? new Date(me.membership.currentPeriodEnd).toLocaleString()
+                      : '—'}
+                  </Snippet>
                 </div>
                 <div>
                   Monto del plan:{' '}
@@ -214,8 +220,7 @@ export default function Dashboard() {
             <Tab key="referrals" title="Cómo ganar">
               <div className="text-sm leading-6">
                 Ganas <b>$2</b> por activación/renovación de cada referido en tu red hasta{' '}
-                <b>7 niveles</b>. Comparte tu enlace y usa cupones de un solo uso para incentivar la
-                primera compra.
+                <b>7 niveles</b>. Comparte tu enlace y gana.
               </div>
             </Tab>
           </Tabs>

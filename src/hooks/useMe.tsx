@@ -22,6 +22,10 @@ export type CustomerMe = {
   referredCount?: number
   children: number[]
   referredBy: number
+  wallet: {
+    balance: number
+    totalEarned: number
+  }
 }
 
 // --- Data hooks (replace with your real fetchers) ---

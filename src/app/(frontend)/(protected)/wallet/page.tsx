@@ -1,17 +1,7 @@
 'use client'
 import React, { useMemo, useState } from 'react'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
 
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select'
 import {
   Table,
   TableBody,
@@ -22,6 +12,14 @@ import {
   Tab,
   Tabs,
   Chip,
+  Input,
+  Card,
+  CardBody,
+  CardHeader,
+  Button,
+  Select,
+  SelectItem,
+  Pagination,
 } from '@heroui/react'
 import {
   Download,
@@ -38,6 +36,11 @@ import { StatusBadge } from './components/StatusBadge'
 import { WithdrawalBadge } from './components/WithdrawalBadge'
 import { CutBadge } from './components/CutBadge'
 import { DemoLoading } from '@/components/LoadingScreen'
+import { CardTitle } from '@/components/ui/card'
+import { useAxios } from 'use-axios-client'
+import useMe from '@/hooks/useMe'
+import { PaginatedDocs } from 'payload'
+import { Customer, ReferralPayout } from '@/payload-types'
 
 const fmtCurrency = (n: Money, currency: string) =>
   new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(n)
@@ -85,29 +88,14 @@ function WalletPage(props: WalletProps) {
     cuts,
     onRequestWithdraw,
     onRefresh,
+    page,
+    setPage,
+    level,
+    setLevel,
   } = props
-  const [levelFilter, setLevelFilter] = useState<string>('all')
+  const [levelFilter, setLevelFilter] = useState(new Set([]))
   const [periodFilter, setPeriodFilter] = useState<string>('') // AAAA-MM
   const [search, setSearch] = useState('')
-
-  const filteredCommissions = useMemo(() => {
-    return commissions.filter((c) => {
-      const byLevel = levelFilter === 'all' || String(c.level) === levelFilter
-      const byPeriod = !periodFilter || c.period === periodFilter
-      const q = search.trim().toLowerCase()
-      const bySearch = !q || `${c.sourceUser} ${c.id}`.toLowerCase().includes(q)
-      return byLevel && byPeriod && bySearch
-    })
-  }, [commissions, levelFilter, periodFilter, search])
-
-  const enrichedCuts = useMemo(
-    () =>
-      cuts.map((c) => ({
-        ...c,
-        net: c.net ?? c.commissionsTotal - c.withdrawalsTotal + (c.adjustments ?? 0),
-      })),
-    [cuts],
-  )
 
   return (
     <div className="container mx-auto px-4 py-6 space-y-6" suppressHydrationWarning>
@@ -117,11 +105,11 @@ function WalletPage(props: WalletProps) {
           <Wallet className="h-6 w-6" /> Wallet
         </h1>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => onRefresh?.()}>
+          <Button variant="ghost" onPress={() => onRefresh?.()}>
             <RefreshCcw className="h-4 w-4 mr-2" />
             Actualizar
           </Button>
-          <Button onClick={() => onRequestWithdraw?.()}>
+          <Button onPress={() => onRequestWithdraw?.()} color="primary">
             <ArrowDownToLine className="h-4 w-4 mr-2" />
             Solicitar retiro
           </Button>
@@ -130,44 +118,44 @@ function WalletPage(props: WalletProps) {
 
       {/* Resumen de balance */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card>
+        <Card shadow="sm">
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Balance disponible</CardTitle>
           </CardHeader>
-          <CardContent className="flex items-end justify-between">
+          <CardBody className="flex flex-col gap-2">
             <div className="text-3xl font-bold">
               {fmtCurrency(balance.available, balance.currency)}
             </div>
-            <Chip color="primary" className="uppercase">
+            <Chip color="primary" className="uppercase" size="sm">
               Disponible
             </Chip>
-          </CardContent>
+          </CardBody>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Pendiente por liberar</CardTitle>
           </CardHeader>
-          <CardContent className="flex items-end justify-between">
+          <CardBody className="flex flex-col gap-2">
             <div className="text-3xl font-bold">
               {fmtCurrency(balance.pending, balance.currency)}
             </div>
-            <Chip color="secondary" className="uppercase">
+            <Chip color="secondary" className="uppercase" size="sm">
               Pendiente
             </Chip>
-          </CardContent>
+          </CardBody>
         </Card>
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium">Ganado de por vida</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2">
+          <CardBody className="flex flex-col gap-2">
             <div className="text-3xl font-bold">
               {fmtCurrency(balance.lifetimeEarned, balance.currency)}
             </div>
             <div className="text-xs text-muted-foreground">
               Último pago: {fmtDate(balance.lastPayoutAt)}
             </div>
-          </CardContent>
+          </CardBody>
         </Card>
       </div>
 
@@ -179,14 +167,14 @@ function WalletPage(props: WalletProps) {
           </CardTitle>
           <Button
             size="sm"
-            variant="outline"
-            onClick={() => downloadBlob(toCSV(trend), `trend-${Date.now()}.csv`)}
+            variant="ghost"
+            onPress={() => downloadBlob(toCSV(trend), `trend-${Date.now()}.csv`)}
           >
             <Download className="h-4 w-4 mr-2" />
             CSV
           </Button>
         </CardHeader>
-        <CardContent className="h-60">
+        <CardBody className="h-60">
           <ResponsiveContainer width="100%" height="100%">
             <AreaChart data={trend} margin={{ left: 8, right: 8, top: 8, bottom: 8 }}>
               <defs>
@@ -209,19 +197,19 @@ function WalletPage(props: WalletProps) {
               />
             </AreaChart>
           </ResponsiveContainer>
-        </CardContent>
+        </CardBody>
       </Card>
 
       {/* Tabs */}
       <Tabs aria-label="Options">
         {/* Comisiones */}
         <Tab key="commissions" title="Comisiones">
-          <Card>
+          <Card radius="sm">
             <CardHeader className="pb-2">
               <CardTitle className="text-base font-medium">Histórico de comisiones</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="grid gap-3 md:grid-cols-3">
+            <CardBody className="space-y-3">
+              <div className="grid gap-3 md:grid-cols-3 px-4">
                 <div className="space-y-1">
                   <Label>Búsqueda</Label>
                   <Input
@@ -232,18 +220,20 @@ function WalletPage(props: WalletProps) {
                 </div>
                 <div className="space-y-1">
                   <Label>Nivel</Label>
-                  <Select value={levelFilter} onValueChange={setLevelFilter}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Todos" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">Todos</SelectItem>
-                      {Array.from({ length: 7 }).map((_, i) => (
-                        <SelectItem value={String(i + 1)} key={i}>
-                          Nivel {i + 1}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
+                  <Select
+                    onSelectionChange={(keys) => {
+                      setLevel(keys.currentKey as string)
+                    }}
+                    placeholder="Seleccionar"
+                  >
+                    <SelectItem key="">Todos</SelectItem>
+                    <SelectItem key="1">Nivel 1</SelectItem>
+                    <SelectItem key="2">Nivel 2</SelectItem>
+                    <SelectItem key="3">Nivel 3</SelectItem>
+                    <SelectItem key="4">Nivel 4</SelectItem>
+                    <SelectItem key="5">Nivel 5</SelectItem>
+                    <SelectItem key="6">Nivel 6</SelectItem>
+                    <SelectItem key="7">Nivel 7</SelectItem>
                   </Select>
                 </div>
                 <div className="space-y-1">
@@ -256,15 +246,15 @@ function WalletPage(props: WalletProps) {
                 </div>
               </div>
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-between items-center px-4">
                 <div className="text-sm text-muted-foreground flex items-center gap-2">
-                  <Filter className="h-4 w-4" /> {filteredCommissions.length} resultados
+                  <Filter className="h-4 w-4" /> {commissions.totalDocs} resultados
                 </div>
                 <Button
                   size="sm"
-                  variant="outline"
-                  onClick={() =>
-                    downloadBlob(toCSV(filteredCommissions), `commissions-${Date.now()}.csv`)
+                  variant="ghost"
+                  onPress={() =>
+                    downloadBlob(toCSV(commissions.docs), `commissions-${Date.now()}.csv`)
                   }
                 >
                   <Download className="h-4 w-4 mr-2" />
@@ -273,7 +263,23 @@ function WalletPage(props: WalletProps) {
               </div>
 
               <div>
-                <Table>
+                <Table
+                  radius="sm"
+                  shadow="none"
+                  bottomContent={
+                    <div className="flex w-full justify-center">
+                      <Pagination
+                        isCompact
+                        showControls
+                        showShadow
+                        color="secondary"
+                        page={page}
+                        total={commissions.totalPages}
+                        onChange={(page) => setPage(page)}
+                      />
+                    </div>
+                  }
+                >
                   <TableHeader>
                     <TableColumn className="whitespace-nowrap">Fecha</TableColumn>
                     <TableColumn>Nivel</TableColumn>
@@ -283,7 +289,7 @@ function WalletPage(props: WalletProps) {
                     <TableColumn>Estado</TableColumn>
                   </TableHeader>
                   <TableBody emptyContent={'Sin registros.'}>
-                    {filteredCommissions.map((c) => (
+                    {commissions.docs.map((c) => (
                       <TableRow key={c.id}>
                         <TableCell>{fmtDate(c.date)}</TableCell>
                         <TableCell>{c.level}</TableCell>
@@ -298,7 +304,7 @@ function WalletPage(props: WalletProps) {
                   </TableBody>
                 </Table>
               </div>
-            </CardContent>
+            </CardBody>
           </Card>
         </Tab>
 
@@ -312,12 +318,12 @@ function WalletPage(props: WalletProps) {
                 Nuevo retiro
               </Button>
             </CardHeader>
-            <CardContent className="space-y-3">
+            <CardBody className="space-y-3">
               <div className="flex justify-end">
                 <Button
                   size="sm"
-                  variant="outline"
-                  onClick={() => downloadBlob(toCSV(withdrawals), `withdrawals-${Date.now()}.csv`)}
+                  variant="ghost"
+                  onPress={() => downloadBlob(toCSV(withdrawals), `withdrawals-${Date.now()}.csv`)}
                 >
                   <Download className="h-4 w-4 mr-2" />
                   CSV
@@ -347,79 +353,7 @@ function WalletPage(props: WalletProps) {
                   </TableBody>
                 </Table>
               </div>
-            </CardContent>
-          </Card>
-        </Tab>
-
-        {/* Cortes mensuales */}
-        <Tab key="cuts" title="Cortes mensuales">
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-base font-medium">Historial de cortes mensuales</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-3">
-              <div className="flex justify-between items-center">
-                <div className="text-sm text-muted-foreground">
-                  Registros: {enrichedCuts.length}
-                </div>
-                <Button
-                  size="sm"
-                  variant="outline"
-                  onClick={() => downloadBlob(toCSV(enrichedCuts), `cuts-${Date.now()}.csv`)}
-                >
-                  <Download className="h-4 w-4 mr-2" />
-                  CSV
-                </Button>
-              </div>
-
-              <div className="rounded-lg border overflow-x-auto">
-                <Table>
-                  <TableHeader>
-                    <TableColumn>Mes</TableColumn>
-                    <TableColumn>Periodo</TableColumn>
-                    <TableColumn>Comisiones</TableColumn>
-                    <TableColumn>Retiros</TableColumn>
-                    <TableColumn>Ajustes</TableColumn>
-                    <TableColumn>Netos</TableColumn>
-                    <TableColumn>Estado</TableColumn>
-                    <TableColumn>Recibo</TableColumn>
-                  </TableHeader>
-                  <TableBody emptyContent={'Sin cortes registrados.'}>
-                    {enrichedCuts.map((c) => (
-                      <TableRow key={c.id}>
-                        <TableCell className="font-medium">{c.month}</TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {fmtDate(c.from)} – {fmtDate(c.to)}
-                        </TableCell>
-                        <TableCell>{fmtCurrency(c.commissionsTotal, balance.currency)}</TableCell>
-                        <TableCell>{fmtCurrency(c.withdrawalsTotal, balance.currency)}</TableCell>
-                        <TableCell>{fmtCurrency(c.adjustments ?? 0, balance.currency)}</TableCell>
-                        <TableCell className="font-semibold">
-                          {fmtCurrency(c.net ?? 0, balance.currency)}
-                        </TableCell>
-                        <TableCell>
-                          <CutBadge status={c.status} />
-                        </TableCell>
-                        <TableCell>
-                          {c.receiptUrl ? (
-                            <a
-                              href={c.receiptUrl}
-                              className="text-primary underline text-sm"
-                              target="_blank"
-                              rel="noreferrer"
-                            >
-                              Ver
-                            </a>
-                          ) : (
-                            <span className="text-muted-foreground">—</span>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </CardContent>
+            </CardBody>
           </Card>
         </Tab>
       </Tabs>
@@ -429,13 +363,32 @@ function WalletPage(props: WalletProps) {
 
 // -- Mock de ejemplo para ver en el canvas (elimina cuando conectes API)
 export default function DemoWallet() {
-  const [loading, setLoading] = useState(false)
+  const [page, setPage] = useState(1)
+  const [level, setLevel] = useState<string | null>(null)
+
+  const { data: user, loading: loadingUser } = useMe()
+
+  const { data: history } = useAxios<PaginatedDocs<ReferralPayout>>({
+    url: '/api/comissions/history',
+    params: {
+      page,
+      level,
+    },
+  })
+
+  const loading = useMemo(() => {
+    return loadingUser
+  }, [loadingUser])
 
   const props: WalletProps = {
+    page,
+    setPage,
+    level,
+    setLevel,
     balance: {
-      available: 324.5,
-      pending: 120.0,
-      lifetimeEarned: 2450.75,
+      available: user?.wallet.balance || 0,
+      pending: 0,
+      lifetimeEarned: user?.wallet.totalEarned || 0,
       lastPayoutAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 17).toISOString(),
       currency: 'USD',
     },
@@ -447,20 +400,25 @@ export default function DemoWallet() {
         amount: Math.max(50, Math.round(50 + Math.random() * 400)),
       }
     }),
-    commissions: Array.from({ length: 24 }).map((_, i) => {
-      const d = new Date()
-      d.setDate(d.getDate() - i * 3)
-      const month = d.toISOString().slice(0, 7)
-      return {
-        id: `C-${1000 + i}`,
-        date: d.toISOString(),
-        level: (i % 5) + 1,
-        sourceUser: i % 3 === 0 ? 'orangeTree234' : i % 3 === 1 ? 'rosaryAgent777' : 'blueNova12',
-        amount: Math.round(5 + Math.random() * 25),
-        period: month,
-        status: (['accrued', 'paid', 'reversed'] as const)[i % 3],
-      } satisfies CommissionRow
-    }),
+    commissions: {
+      docs:
+        history?.docs.map((r) => {
+          const d = new Date(r.createdAt)
+          const month = d.toISOString().slice(0, 7)
+          return {
+            id: r.id.toString(),
+            date: d.toISOString(),
+            level: r.level,
+            sourceUser: (r.payer as Customer).name,
+            amount: r.amount,
+            period: month,
+            status: 'paid',
+          } as CommissionRow
+        }) || [],
+      totalDocs: history?.totalDocs || 0,
+      totalPages: history?.totalPages || 0,
+    },
+
     withdrawals: [
       {
         id: 'W-1001',

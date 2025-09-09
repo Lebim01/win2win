@@ -19,6 +19,7 @@ import { ensureRootAdmin } from './scripts/create-initial-admin'
 import { ReferralPayouts } from './collections/ReferralPayouts'
 import { Coupons } from './collections/Coupons'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
+import { Withdrawals } from './collections/Withdrawals'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -70,7 +71,7 @@ export default buildConfig({
       connectionString: process.env.DATABASE_URI || '',
     },
   }),
-  collections: [Pages, Media, Admins, Customers, ReferralPayouts, Coupons],
+  collections: [Pages, Media, Admins, Customers, ReferralPayouts, Coupons, Withdrawals],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
