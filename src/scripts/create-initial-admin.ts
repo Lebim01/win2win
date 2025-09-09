@@ -27,7 +27,6 @@ export async function ensureRootAdmin(payload: Payload) {
         password,
         name,
         role: 'admin',
-        _verified: true,
       },
       user: {
         collection: 'admins',
