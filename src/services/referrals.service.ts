@@ -13,6 +13,6 @@ export const getTree = async (): Promise<
     membership_is_active: boolean
   }[]
 > => {
-  const res = await fetch(`/api/referral-tree`, { credentials: 'include' })
+  const res = await fetch(`/api/referrals/referral-tree`, { credentials: 'include' })
   return await res.json()
 }

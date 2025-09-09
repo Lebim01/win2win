@@ -85,7 +85,6 @@ function WalletPage(props: WalletProps) {
     trend = [],
     commissions,
     withdrawals,
-    cuts,
     onRequestWithdraw,
     onRefresh,
     page,
@@ -93,7 +92,6 @@ function WalletPage(props: WalletProps) {
     level,
     setLevel,
   } = props
-  const [levelFilter, setLevelFilter] = useState(new Set([]))
   const [periodFilter, setPeriodFilter] = useState<string>('') // AAAA-MM
   const [search, setSearch] = useState('')
 
@@ -187,6 +185,9 @@ function WalletPage(props: WalletProps) {
               <YAxis tick={{ fontSize: 12 }} />
               <Tooltip
                 formatter={(v: any) => [fmtCurrency(Number(v), balance.currency), 'Monto']}
+                labelStyle={{
+                  color: '#000',
+                }}
               />
               <Area
                 type="monotone"
@@ -271,7 +272,6 @@ function WalletPage(props: WalletProps) {
                       <Pagination
                         isCompact
                         showControls
-                        showShadow
                         color="secondary"
                         page={page}
                         total={commissions.totalPages}
@@ -310,16 +310,16 @@ function WalletPage(props: WalletProps) {
 
         {/* Retiros */}
         <Tab key="withdrawals" title="Retiros">
-          <Card>
-            <CardHeader className="pb-2 flex items-center justify-between">
+          <Card radius="sm">
+            <CardHeader className="pb-2 flex items-center justify-between px-4">
               <CardTitle className="text-base font-medium">Retiros</CardTitle>
-              <Button size="sm" onClick={() => onRequestWithdraw?.()}>
+              <Button size="sm" onPress={() => onRequestWithdraw?.()}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo retiro
               </Button>
             </CardHeader>
             <CardBody className="space-y-3">
-              <div className="flex justify-end">
+              <div className="flex justify-end px-4">
                 <Button
                   size="sm"
                   variant="ghost"
@@ -329,8 +329,8 @@ function WalletPage(props: WalletProps) {
                   CSV
                 </Button>
               </div>
-              <div className="rounded-lg border overflow-x-auto">
-                <Table>
+              <div className="overflow-x-auto">
+                <Table shadow="none" radius="sm">
                   <TableHeader>
                     <TableColumn>Fecha</TableColumn>
                     <TableColumn>Método</TableColumn>
@@ -376,9 +376,30 @@ export default function DemoWallet() {
     },
   })
 
+  const { data: trend, loading: loadingTrend } = useAxios<
+    {
+      cumulative_commissions: string
+      mom_change_pct: null
+      month_date: string
+      month_label: string
+      monthly_commissions: string
+    }[]
+  >({
+    url: '/api/comissions/trend',
+  })
+
+  const { data: withdrawals, loading: loadinWithdrawals } = useAxios<{
+    pending: number
+    docs: any[]
+    totalPages: number
+    totalDocs: number
+  }>({
+    url: '/api/withdrawals',
+  })
+
   const loading = useMemo(() => {
-    return loadingUser
-  }, [loadingUser])
+    return loadingUser || loadingTrend || loadinWithdrawals
+  }, [loadingUser, loadingTrend, loadinWithdrawals])
 
   const props: WalletProps = {
     page,
@@ -387,19 +408,18 @@ export default function DemoWallet() {
     setLevel,
     balance: {
       available: user?.wallet.balance || 0,
-      pending: 0,
+      pending: withdrawals?.pending || 0,
       lifetimeEarned: user?.wallet.totalEarned || 0,
       lastPayoutAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 17).toISOString(),
       currency: 'USD',
     },
-    trend: Array.from({ length: 12 }).map((_, i) => {
-      const d = new Date()
-      d.setMonth(d.getMonth() - (11 - i))
-      return {
-        date: d.toISOString().slice(0, 7),
-        amount: Math.max(50, Math.round(50 + Math.random() * 400)),
-      }
-    }),
+    trend:
+      trend?.map((r) => {
+        return {
+          date: r.month_label,
+          amount: Number(r.monthly_commissions),
+        }
+      }) || [],
     commissions: {
       docs:
         history?.docs.map((r) => {
@@ -419,48 +439,17 @@ export default function DemoWallet() {
       totalPages: history?.totalPages || 0,
     },
 
-    withdrawals: [
-      {
-        id: 'W-1001',
-        date: new Date().toISOString(),
-        amount: 150,
-        method: 'USDT',
-        status: 'processing',
-        reference: '0xa1b2...ee',
-      },
-      {
-        id: 'W-1000',
-        date: new Date(Date.now() - 86400000 * 30).toISOString(),
-        amount: 300,
-        method: 'Bank',
-        status: 'paid',
-        reference: 'FOLIO-0923-33',
-      },
-    ],
-    cuts: [
-      {
-        id: 'CUT-2025-08',
-        month: '2025-08',
-        from: '2025-08-01',
-        to: '2025-08-31',
-        commissionsTotal: 520,
-        withdrawalsTotal: 300,
-        adjustments: 0,
-        status: 'closed',
-        receiptUrl: '#',
-      },
-      {
-        id: 'CUT-2025-07',
-        month: '2025-07',
-        from: '2025-07-01',
-        to: '2025-07-31',
-        commissionsTotal: 430,
-        withdrawalsTotal: 400,
-        adjustments: -20,
-        status: 'paid',
-        receiptUrl: '#',
-      },
-    ],
+    withdrawals:
+      withdrawals?.docs.map((r) => {
+        return {
+          id: r.id,
+          amount: r.amount,
+          method: r.method,
+          status: r.status,
+          reference: r.reference,
+          date: r.createdAt,
+        }
+      }) || [],
   }
 
   if (loading) {

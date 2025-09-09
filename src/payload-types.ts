@@ -74,6 +74,7 @@ export interface Config {
     customers: Customer;
     referral_payouts: ReferralPayout;
     coupons: Coupon;
+    withdrawals: Withdrawal;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -90,6 +91,7 @@ export interface Config {
     customers: CustomersSelect<false> | CustomersSelect<true>;
     referral_payouts: ReferralPayoutsSelect<false> | ReferralPayoutsSelect<true>;
     coupons: CouponsSelect<false> | CouponsSelect<true>;
+    withdrawals: WithdrawalsSelect<false> | WithdrawalsSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -791,6 +793,20 @@ export interface Coupon {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "withdrawals".
+ */
+export interface Withdrawal {
+  id: number;
+  user: number | Customer;
+  amount: number;
+  status?: ('pending' | 'approved' | 'rejected' | 'paid') | null;
+  method: 'bank' | 'paypal' | 'crypto';
+  reference?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -949,6 +965,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'coupons';
         value: number | Coupon;
+      } | null)
+    | ({
+        relationTo: 'withdrawals';
+        value: number | Withdrawal;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1349,6 +1369,19 @@ export interface CouponsSelect<T extends boolean = true> {
   payoutEligible?: T;
   expiresAt?: T;
   meta?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "withdrawals_select".
+ */
+export interface WithdrawalsSelect<T extends boolean = true> {
+  user?: T;
+  amount?: T;
+  status?: T;
+  method?: T;
+  reference?: T;
   updatedAt?: T;
   createdAt?: T;
 }

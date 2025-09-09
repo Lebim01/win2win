@@ -17,25 +17,11 @@ export type WithdrawalRow = {
   reference?: string // txid, folio
 }
 
-export type CutRow = {
-  id: string
-  month: string // AAAA-MM
-  from: string // ISO inicio de corte
-  to: string // ISO fin de corte
-  commissionsTotal: Money
-  withdrawalsTotal: Money
-  adjustments?: Money
-  net?: Money // calculado si no viene
-  status: 'open' | 'closed' | 'paid'
-  receiptUrl?: string
-}
-
 export type WalletProps = {
   balance: BalanceSummary
   trend?: { date: string; amount: Money }[] // para la gráfica (últimos 12 meses)
   commissions: { docs: CommissionRow[]; totalDocs: number; totalPages: number }
   withdrawals: WithdrawalRow[]
-  cuts: CutRow[]
   onRequestWithdraw?: () => void // hook al flujo de retiro
   onRefresh?: () => void // recargar datos
   page: number

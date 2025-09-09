@@ -63,7 +63,7 @@ export const Withdrawals: CollectionConfig = {
       required: true,
     },
     {
-      name: 'details',
+      name: 'reference',
       type: 'text',
       label: 'Detalles del método (ej. cuenta, wallet, correo)',
     },
