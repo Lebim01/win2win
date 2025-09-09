@@ -34,7 +34,6 @@ import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'rec
 import { CommissionRow, Money, WalletProps } from './types'
 import { StatusBadge } from './components/StatusBadge'
 import { WithdrawalBadge } from './components/WithdrawalBadge'
-import { CutBadge } from './components/CutBadge'
 import { DemoLoading } from '@/components/LoadingScreen'
 import { CardTitle } from '@/components/ui/card'
 import { useAxios } from 'use-axios-client'
