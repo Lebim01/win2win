@@ -21,6 +21,14 @@ const ProfileDropdown = () => {
             Perfil
           </DropdownItem>
 
+          <DropdownItem key="referrals" href="/referrals">
+            Referidos
+          </DropdownItem>
+
+          <DropdownItem key="wallet" href="/wallet">
+            Billetera
+          </DropdownItem>
+
           <DropdownItem key="delete" className="text-danger" color="danger" onPress={_logout}>
             Cerrar Sesión
           </DropdownItem>

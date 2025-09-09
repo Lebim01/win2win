@@ -84,7 +84,7 @@ const TableDirects = () => {
 
         <div className="flex justify-between items-center px-4 mt-2">
           <div className="text-sm text-muted-foreground flex items-center gap-2">
-            <Filter className="h-4 w-4" /> {0} resultados
+            <Filter className="h-4 w-4" /> {directs.totalDocs} resultados
           </div>
         </div>
 

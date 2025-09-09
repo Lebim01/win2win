@@ -10,7 +10,7 @@ const Tree = () => {
         <Tab title="Directos" key="directs">
           <TableDirects />
         </Tab>
-        <Tab title="Grafico" key="graph">
+        <Tab title="Grafico" key="graph" className="overflow-auto">
           <Graph />
         </Tab>
       </Tabs>

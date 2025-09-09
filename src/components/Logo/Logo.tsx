@@ -22,7 +22,7 @@ export const Logo = (props: Props) => {
       loading={loading}
       fetchPriority={priority}
       decoding="async"
-      className={clsx('h-[34px]', className)}
+      className={clsx('h-[30px] md:h-[34px]', className)}
       src={'/logo-white.png'}
     />
   )
