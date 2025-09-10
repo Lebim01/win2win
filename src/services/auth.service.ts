@@ -9,8 +9,8 @@ export const logout = async () => {
         'Content-Type': 'application/json',
       },
     },
-  ).finally(() => {
-    action()
+  ).finally(async () => {
+    await action()
     window.location.reload()
   })
 }
