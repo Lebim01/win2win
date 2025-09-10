@@ -13,7 +13,7 @@ const SignIn = () => {
     const form = e.currentTarget
     const formData = new FormData(form)
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/customers/login`, {
+    const response = await fetch(`/api/customers/login`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

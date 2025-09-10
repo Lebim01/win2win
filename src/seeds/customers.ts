@@ -39,13 +39,13 @@ export const seedCustomers = async (payload: Payload) => {
         collection: 'customers',
         data: {
           email: `demo-${level}-${i}-${crypto.randomBytes(2).toString('hex')}@mail.com`,
-          password: 'Leafitome10.',
+          password: '11111111',
           name: `Demo L${level} #${i + 1}`,
           referralCode,
 
           // 🔑 campos importantes
-          inviterCode: rootReferralCode, // el código del padre
-          root: root.id, // todos cuelgan del root
+          inviterCode: rootReferralCode,
+          root: root.id,
           ancestors: [...(parent.ancestors ?? []), parent.id],
 
           _verified: true,

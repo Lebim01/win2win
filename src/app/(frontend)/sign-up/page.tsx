@@ -1,18 +1,29 @@
 'use client'
 import { FormEventHandler, useState } from 'react'
 import { FormValuesSchema } from './zod'
-import Link from 'next/link'
 import { Button, Input } from '@heroui/react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
+import Link from 'next/link'
+import axios from 'axios'
 
 const Signup = () => {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const refCode = searchParams.get('refCode') as string
+
   const [error, setErrors] = useState<{
     name?: string[] | undefined
     email?: string[] | undefined
     password?: string[] | undefined
     confirmPassword?: string[] | undefined
+    form?: string[] | undefined
   }>({})
 
-  const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+  const [showPassword, setShowPassword] = useState(false)
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false)
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
     const form = e.currentTarget
@@ -32,7 +43,44 @@ const Signup = () => {
       setErrors(parsed.error.flatten().fieldErrors)
     } else {
       const values = parsed.data
-      console.log(values)
+
+      try {
+        const response = await axios.post(
+          '/api/sign-up',
+          {
+            ...values,
+            refCode,
+          },
+          {
+            withCredentials: true,
+          },
+        )
+
+        if (response.data.ok) {
+          await fetch(`/api/customers/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              email: formData.get('email'),
+              password: formData.get('password'),
+            }),
+            credentials: 'include',
+          })
+          router.refresh()
+        }
+      } catch (err: any) {
+        if (err.response?.data?.details) {
+          setErrors({
+            form: ['Error: ' + err.response.data.details],
+          })
+        } else {
+          setErrors({
+            form: ['Error inesperado, intenta mas tarde'],
+          })
+        }
+      }
     }
   }
 
@@ -50,27 +98,66 @@ const Signup = () => {
                 placeholder="name@company.com"
                 required
                 variant="faded"
+                isInvalid={error?.name && error?.name?.length > 0}
+                errorMessage={error.name ? error.name[0] : null}
               />
 
               <Input
                 label="Password"
                 name="password"
-                type="password"
-                placeholder="••••••••"
+                type={showPassword ? 'text' : 'password'}
+                placeholder=""
                 required
                 variant="faded"
+                isInvalid={error?.password && error?.password?.length > 0}
+                errorMessage={error.password ? error.password[0] : null}
+                endContent={
+                  showPassword ? (
+                    <FaRegEye
+                      onClick={() => setShowPassword(false)}
+                      className="hover:cursor-pointer"
+                    />
+                  ) : (
+                    <FaRegEyeSlash
+                      onClick={() => setShowPassword(true)}
+                      className="hover:cursor-pointer hover:text-blue-300"
+                    />
+                  )
+                }
               />
 
               <Input
                 label="Confirm password"
                 name="confirmPassword"
-                type="password"
-                placeholder="••••••••"
+                type={showConfirmPassword ? 'text' : 'password'}
+                placeholder=""
                 required
                 variant="faded"
+                isInvalid={error?.confirmPassword && error?.confirmPassword?.length > 0}
+                errorMessage={error.confirmPassword ? error.confirmPassword[0] : null}
+                endContent={
+                  showConfirmPassword ? (
+                    <FaRegEye
+                      onClick={() => setShowConfirmPassword(false)}
+                      className="hover:cursor-pointer"
+                    />
+                  ) : (
+                    <FaRegEyeSlash
+                      onClick={() => setShowConfirmPassword(true)}
+                      className="hover:cursor-pointer hover:text-blue-300"
+                    />
+                  )
+                }
               />
 
-              <Input label="Your Name" name="name" required variant="faded" />
+              <Input
+                label="Your Name"
+                name="name"
+                required
+                variant="faded"
+                isInvalid={error?.name && error?.name?.length > 0}
+                errorMessage={error.name ? error.name[0] : null}
+              />
 
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -94,6 +181,7 @@ const Signup = () => {
                   </label>
                 </div>
               </div>
+
               <Button type="submit" color="primary" fullWidth>
                 Create an account
               </Button>
