@@ -31,10 +31,10 @@ const AutoComplete: FC<Props> = (props) => {
         },
         { addQueryPrefix: true },
       )
-      let res = await fetch(`/api/${props.collection}${stringifiedQuery}`, {
+      const res = await fetch(`/api/${props.collection}${stringifiedQuery}`, {
         credentials: 'include',
       })
-      let json = await res.json()
+      const json = await res.json()
 
       return {
         items: json.docs,
