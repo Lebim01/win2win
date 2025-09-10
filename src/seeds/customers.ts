@@ -59,7 +59,7 @@ export const seedCustomers = async (payload: Payload) => {
   }
 
   // 2) Poblar hasta nivel 3 (ejemplo). Cambia maxDepth hasta 7 si quieres full.
-  await createChildren(root, 1, 3)
+  // await createChildren(root, 1, 3)
 
   console.log('✅ Customers demo creados.')
 }
