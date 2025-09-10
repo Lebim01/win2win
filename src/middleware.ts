@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 const protected_routes = ['/dashboard', '/profile', '/referrals', '/wallet']
 
-const no_authenticated_routes = ['/sign-in']
+const no_authenticated_routes = ['/sign-in', '/sign-up']
 
 export function middleware(request: NextRequest) {
   const url = new URL(request.url)

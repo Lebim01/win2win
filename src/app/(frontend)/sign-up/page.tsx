@@ -1,5 +1,5 @@
 'use client'
-import { FormEventHandler, useState } from 'react'
+import { FormEventHandler, useEffect, useState } from 'react'
 import { FormValuesSchema } from './zod'
 import { Button, Input } from '@heroui/react'
 import { useRouter, useSearchParams } from 'next/navigation'
@@ -17,14 +17,27 @@ const Signup = () => {
     email?: string[] | undefined
     password?: string[] | undefined
     confirmPassword?: string[] | undefined
+    coupon?: string[] | undefined
     form?: string[] | undefined
   }>({})
+  const [loading, setLoading] = useState(false)
 
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  const [root, setRoot] = useState('')
+
+  useEffect(() => {
+    axios.get(`/api/referrals/${refCode}`).then((r) => {
+      if (r.data.name) {
+        setRoot(r.data.name)
+      }
+    })
+  }, [refCode])
+
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
+    setErrors({})
 
     const form = e.currentTarget
     const formData = new FormData(form)
@@ -34,6 +47,7 @@ const Signup = () => {
       email: formData.get('email') as string,
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
+      coupon: formData.get('coupon') as string,
     }
 
     const parsed = FormValuesSchema.safeParse(formValues)
@@ -45,6 +59,7 @@ const Signup = () => {
       const values = parsed.data
 
       try {
+        setLoading(true)
         const response = await axios.post(
           '/api/sign-up',
           {
@@ -80,6 +95,8 @@ const Signup = () => {
             form: ['Error inesperado, intenta mas tarde'],
           })
         }
+      } finally {
+        setLoading(false)
       }
     }
   }
@@ -89,24 +106,30 @@ const Signup = () => {
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
+            {refCode && root && (
+              <span className="text-blue-300 font-light">Patrocinador: {root}</span>
+            )}
             <h1 className="text-xl font-bold leading-tight tracking-tight">Create an account</h1>
             <form className="space-y-4" onSubmit={onSubmit}>
               <Input
-                label="Your email"
+                label="Correo"
                 name="email"
                 type="email"
                 placeholder="name@company.com"
+                isRequired
                 required
                 variant="faded"
                 isInvalid={error?.name && error?.name?.length > 0}
                 errorMessage={error.name ? error.name[0] : null}
+                isDisabled={loading}
               />
 
               <Input
-                label="Password"
+                label="Contraseña"
                 name="password"
                 type={showPassword ? 'text' : 'password'}
                 placeholder=""
+                isRequired
                 required
                 variant="faded"
                 isInvalid={error?.password && error?.password?.length > 0}
@@ -124,13 +147,15 @@ const Signup = () => {
                     />
                   )
                 }
+                isDisabled={loading}
               />
 
               <Input
-                label="Confirm password"
+                label="Confirmar Contraseña"
                 name="confirmPassword"
                 type={showConfirmPassword ? 'text' : 'password'}
                 placeholder=""
+                isRequired
                 required
                 variant="faded"
                 isInvalid={error?.confirmPassword && error?.confirmPassword?.length > 0}
@@ -148,16 +173,30 @@ const Signup = () => {
                     />
                   )
                 }
+                isDisabled={loading}
               />
 
               <Input
-                label="Your Name"
+                label="Nombre"
                 name="name"
+                isRequired
                 required
                 variant="faded"
                 isInvalid={error?.name && error?.name?.length > 0}
                 errorMessage={error.name ? error.name[0] : null}
+                isDisabled={loading}
               />
+
+              {root && (
+                <Input
+                  label="Cupón"
+                  name="coupon"
+                  variant="faded"
+                  isInvalid={error?.coupon && error?.coupon?.length > 0}
+                  errorMessage={error.coupon ? error.coupon[0] : null}
+                  isDisabled={loading}
+                />
+              )}
 
               <div className="flex items-start">
                 <div className="flex items-center h-5">
@@ -167,6 +206,7 @@ const Signup = () => {
                     type="checkbox"
                     className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
                     required
+                    disabled={loading}
                   />
                 </div>
                 <div className="ml-3 text-sm">
@@ -181,8 +221,12 @@ const Signup = () => {
                   </label>
                 </div>
               </div>
-
-              <Button type="submit" color="primary" fullWidth>
+              {error.form && error.form.length > 0 && (
+                <div className="text-center">
+                  <span className="text-red-400">{error.form[0]}</span>
+                </div>
+              )}
+              <Button type="submit" color="primary" fullWidth isLoading={loading}>
                 Create an account
               </Button>
               <p className="text-sm font-light text-gray-500 dark:text-gray-400">

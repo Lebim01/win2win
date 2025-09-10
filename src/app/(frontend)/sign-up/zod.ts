@@ -28,6 +28,8 @@ export const FormValuesSchema = z
     confirmPassword: z.string().nonoptional({
       error: 'Confirma tu contraseña',
     }),
+
+    coupon: z.string().min(6).max(6).optional(),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {
