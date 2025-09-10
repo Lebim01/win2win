@@ -27,6 +27,9 @@ export const Coupons: CollectionConfig = {
   admin: {
     useAsTitle: 'code',
     defaultColumns: ['code', 'owner', 'redeemed', 'redeemedBy', 'expiresAt'],
+    components: {
+      beforeList: ['@/components/GenerateBatchCoupons'],
+    },
   },
   access: {
     read: ({ req }) => {
@@ -57,7 +60,6 @@ export const Coupons: CollectionConfig = {
       relationTo: 'customers',
       required: true,
       index: true,
-      unique: true,
       label: 'Dueño',
       admin: {
         description: 'Dueño del cupón: el usuario que lo puede "dar" a sus referidos',

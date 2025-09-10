@@ -33,6 +33,8 @@ export const Withdrawals: CollectionConfig = {
       required: true,
       admin: {
         position: 'sidebar',
+        allowCreate: false,
+        allowEdit: false,
       },
     },
     {

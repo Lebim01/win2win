@@ -7,7 +7,7 @@ import { FaCashRegister, FaRegUserCircle } from 'react-icons/fa'
 import { MdSpaceDashboard } from 'react-icons/md'
 import { RiCoupon3Fill } from 'react-icons/ri'
 import { PiHandWithdrawFill } from 'react-icons/pi'
-import { BiSolidReport } from 'react-icons/bi'
+import { BiSolidReport, BiSolidServer } from 'react-icons/bi'
 
 const ListboxWrapper: FC<{ children: ReactNode; className?: string }> = ({
   children,
@@ -55,6 +55,7 @@ const AdminSidemenu = (props: any) => {
               buttonStyle="primary"
               icon={<FaCashRegister />}
               iconPosition="left"
+              disabled
             >
               <span>Transacciones</span>
             </Button>
@@ -69,7 +70,7 @@ const AdminSidemenu = (props: any) => {
               <span>Cupones</span>
             </Button>
           </Link>
-          <Link href="/admin" className="w-full no-underline">
+          <Link href="/admin/collections/withdrawals" className="w-full no-underline">
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
@@ -94,7 +95,7 @@ const AdminSidemenu = (props: any) => {
             <Button
               className="flex w-full m-0"
               buttonStyle="primary"
-              icon={<BiSolidReport size={16} />}
+              icon={<BiSolidServer size={16} />}
               iconPosition="left"
             >
               <span>Servicios</span>

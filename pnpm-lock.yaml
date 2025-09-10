@@ -77,6 +77,9 @@ importers:
       '@radix-ui/themes':
         specifier: ^3.2.1
         version: 3.2.1(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-stately/data':
+        specifier: ^3.14.0
+        version: 3.14.0(react@19.1.0)
       '@tailwindcss/postcss':
         specifier: ^4.1.12
         version: 4.1.12
@@ -131,6 +134,9 @@ importers:
       prism-react-renderer:
         specifier: ^2.3.1
         version: 2.4.1(react@19.1.0)
+      qs-esm:
+        specifier: ^7.0.2
+        version: 7.0.2
       radix-ui:
         specifier: ^1.4.3
         version: 1.4.3(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -160,7 +166,7 @@ importers:
         version: 1.0.7(tailwindcss@4.1.12)
       tree-graph-react:
         specifier: ^2.4.7
-        version: 2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(axios@1.11.0)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
+        version: 2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
       use-axios-client:
         specifier: ^2.0.0
         version: 2.0.0(axios@1.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -3262,6 +3268,11 @@ packages:
 
   '@react-stately/combobox@3.11.1':
     resolution: {integrity: sha512-ZZh+SaAmddoY+MeJr470oDYA0nGaJm4xoHCBapaBA0JNakGC/wTzF/IRz3tKQT2VYK4rumr1BJLZQydGp7zzeg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
+
+  '@react-stately/data@3.14.0':
+    resolution: {integrity: sha512-3GUsOXatYohBX2wTQHnJKVQlFfYXnt7IoDDuIaUeM8kXlF+dRSFAOAfPUSGAph6lJz2ht4dq1SEl6ZL/u+dRlQ==}
     peerDependencies:
       react: ^16.8.0 || ^17.0.0-rc.1 || ^18.0.0 || ^19.0.0-rc.1
 
@@ -11911,6 +11922,12 @@ snapshots:
       '@swc/helpers': 0.5.15
       react: 19.1.0
 
+  '@react-stately/data@3.14.0(react@19.1.0)':
+    dependencies:
+      '@react-types/shared': 3.32.0(react@19.1.0)
+      '@swc/helpers': 0.5.15
+      react: 19.1.0
+
   '@react-stately/datepicker@3.15.1(react@19.1.0)':
     dependencies:
       '@internationalized/date': 3.9.0
@@ -16452,14 +16469,14 @@ snapshots:
     dependencies:
       punycode: 2.3.1
 
-  tree-graph-react@2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(axios@1.11.0)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27):
+  tree-graph-react@2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27):
     dependencies:
       jspdf: 2.5.2
       lodash: 4.17.21
       react: 19.1.0
       react-tooltip: 4.5.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       screenfull: 5.2.0
-      tree-graph-react: win2win@file:(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(axios@1.11.0)(monaco-editor@0.52.2)(react-is@17.0.2)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
+      tree-graph-react: win2win@file:(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(monaco-editor@0.52.2)(react-is@17.0.2)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
     transitivePeerDependencies:
       - '@aws-sdk/client-rds-data'
       - '@babel/core'
@@ -16485,12 +16502,12 @@ snapshots:
       - '@vercel/postgres'
       - '@xata.io/client'
       - aws-crt
-      - axios
       - babel-plugin-macros
       - babel-plugin-react-compiler
       - better-sqlite3
       - bufferutil
       - bun-types
+      - debug
       - encoding
       - expo-sqlite
       - gel
@@ -16929,7 +16946,7 @@ snapshots:
       siginfo: 2.0.0
       stackback: 0.0.2
 
-  win2win@file:(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(axios@1.11.0)(monaco-editor@0.52.2)(react-is@17.0.2)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27):
+  win2win@file:(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(monaco-editor@0.52.2)(react-is@17.0.2)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27):
     dependencies:
       '@heroui/react': 2.8.3(@types/react@19.1.8)(framer-motion@12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)(tailwindcss@4.1.12)
       '@heroui/system': 2.4.21(@heroui/theme@2.4.21(tailwindcss@4.1.12))(framer-motion@12.23.12(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -16954,7 +16971,9 @@ snapshots:
       '@radix-ui/react-select': 2.2.6(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-slot': 1.2.3(@types/react@19.1.8)(react@19.1.0)
       '@radix-ui/themes': 3.2.1(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+      '@react-stately/data': 3.14.0(react@19.1.0)
       '@tailwindcss/postcss': 4.1.12
+      axios: 1.11.0
       class-variance-authority: 0.7.1
       clsx: 2.1.1
       cross-env: 7.0.3
@@ -16980,7 +16999,7 @@ snapshots:
       sharp: 0.34.2
       tailwind-merge: 2.6.0
       tailwindcss-animate: 1.0.7(tailwindcss@4.1.12)
-      tree-graph-react: 2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(axios@1.11.0)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
+      tree-graph-react: 2.4.7(@babel/core@7.28.3)(@faceless-ui/modal@3.0.0-beta.2(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@faceless-ui/scroll-info@2.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(@playwright/test@1.54.1)(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(monaco-editor@0.52.2)(react-dom@19.1.0(react@19.1.0))(react-is@17.0.2)(react@19.1.0)(redux@5.0.1)(sass@1.77.4)(tailwindcss@4.1.12)(typescript@5.7.3)(yjs@13.6.27)
       use-axios-client: 2.0.0(axios@1.11.0)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       zod: 4.1.5
     transitivePeerDependencies:
@@ -17008,12 +17027,12 @@ snapshots:
       - '@vercel/postgres'
       - '@xata.io/client'
       - aws-crt
-      - axios
       - babel-plugin-macros
       - babel-plugin-react-compiler
       - better-sqlite3
       - bufferutil
       - bun-types
+      - debug
       - encoding
       - expo-sqlite
       - gel
