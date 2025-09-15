@@ -1,5 +1,5 @@
 'use client'
-import React, { useMemo, useState } from 'react'
+import React, { FormEventHandler, useMemo, useState } from 'react'
 import {
   Card,
   CardHeader,
@@ -22,6 +22,8 @@ import useMe from '@/hooks/useMe'
 import useCoupons from '@/hooks/useCoupons'
 import LoadingDashboard from './LoadingPage'
 import useAxios from '@/hooks/useAxios'
+import axios from 'axios'
+import { useRouter } from 'next/navigation'
 
 // Coupons
 type Coupon = {
@@ -42,8 +44,9 @@ function formatCurrency(v: number | undefined, currency = 'USD') {
 }
 
 export default function Dashboard() {
+  const router = useRouter()
+
   const { data: me, loading, error } = useMe()
-  const [coupon, setCoupon] = useState('')
 
   const remaining = useMemo(
     () => diffNow(me?.membership?.currentPeriodEnd),
@@ -67,8 +70,52 @@ export default function Dashboard() {
 
   const remainingCoupons = useMemo(() => diffNow(data?.expires_at), [data?.expires_at])
 
+  const [errorCoupon, setErrorsCoupon] = useState<{
+    coupon?: string[] | undefined
+    form?: string[] | undefined
+  }>({})
+  const [loadingActive, setLoadingActivate] = useState(false)
+
   if (loading || loadingCoupons) return <LoadingDashboard />
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
+
+  const onSubmitCoupon: FormEventHandler<HTMLFormElement> = async (e) => {
+    e.preventDefault()
+    setErrorsCoupon({})
+
+    const form = e.currentTarget
+    const formData = new FormData(form)
+
+    const formValues = {
+      coupon: formData.get('coupon') as string,
+    }
+
+    try {
+      setLoadingActivate(true)
+      const response = await axios.post(
+        '/api/coupons/use',
+        {
+          coupon: formValues.coupon,
+        },
+        {
+          withCredentials: true,
+        },
+      )
+      router.refresh()
+    } catch (err: any) {
+      if (err.response?.data?.details) {
+        setErrorsCoupon({
+          form: ['Error: ' + err.response.data.details],
+        })
+      } else {
+        setErrorsCoupon({
+          form: ['Error inesperado, intenta mas tarde'],
+        })
+      }
+    } finally {
+      setLoadingActivate(false)
+    }
+  }
 
   return (
     <div className="container mx-auto p-4 md:p-6 md:px-0 md:py-12 grid gap-4">
@@ -120,17 +167,28 @@ export default function Dashboard() {
           <CardFooter className="justify-between gap-2">
             {!isActive && !me.membership?.firstActivatedAt && (
               <>
-                <Input
-                  size="sm"
-                  label="Cupón (opcional)"
-                  value={coupon}
-                  onValueChange={setCoupon}
-                  placeholder="ABC123"
-                  className="max-w-xs"
-                />
-                <Button color={isActive ? 'warning' : 'primary'}>
-                  {isActive ? 'Renovar' : 'Activar membresía'}
-                </Button>
+                <form onSubmit={onSubmitCoupon}>
+                  <Input
+                    size="sm"
+                    name="coupon"
+                    label="Cupón"
+                    placeholder="ABC123"
+                    className="max-w-xs"
+                  />
+                  <Button color={'primary'} isLoading={loadingActive}>
+                    Activar membresía
+                  </Button>
+                  {errorCoupon?.coupon && errorCoupon?.coupon?.length > 0 && (
+                    <span className="text-red-400">
+                      {errorCoupon.coupon ? errorCoupon.coupon[0] : null}
+                    </span>
+                  )}
+                  {errorCoupon?.form && errorCoupon?.form?.length > 0 && (
+                    <span className="text-red-400">
+                      {errorCoupon.form ? errorCoupon.form[0] : null}
+                    </span>
+                  )}
+                </form>
               </>
             )}
             {isActive && (
