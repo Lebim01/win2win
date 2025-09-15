@@ -44,7 +44,6 @@ const SignIn = () => {
                 name="email"
                 type="email"
                 placeholder="name@company.com"
-                value="root@example.com"
                 required
                 variant="faded"
               />
@@ -54,7 +53,6 @@ const SignIn = () => {
                 name="password"
                 type="password"
                 placeholder="••••••••"
-                value="11111111"
                 required
                 variant="faded"
               />
