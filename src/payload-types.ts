@@ -76,6 +76,7 @@ export interface Config {
     coupons: Coupon;
     withdrawals: Withdrawal;
     'service-charges': ServiceCharge;
+    membership: Membership;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +95,7 @@ export interface Config {
     coupons: CouponsSelect<false> | CouponsSelect<true>;
     withdrawals: WithdrawalsSelect<false> | WithdrawalsSelect<true>;
     'service-charges': ServiceChargesSelect<false> | ServiceChargesSelect<true>;
+    membership: MembershipSelect<false> | MembershipSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -682,8 +684,7 @@ export interface Customer {
     currentPeriodStart?: string | null;
     currentPeriodEnd?: string | null;
     firstActivatedAt?: string | null;
-    planAmount?: number | null;
-    currency?: string | null;
+    membership?: (number | null) | Membership;
   };
   /**
    * Cada activación/renovación mensual
@@ -731,6 +732,19 @@ export interface Customer {
       }[]
     | null;
   password?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "membership".
+ */
+export interface Membership {
+  id: number;
+  name: string;
+  planAmount: number;
+  currency: string;
+  maxLevels: number;
+  updatedAt: string;
+  createdAt: string;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -989,6 +1003,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'service-charges';
         value: number | ServiceCharge;
+      } | null)
+    | ({
+        relationTo: 'membership';
+        value: number | Membership;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1318,8 +1336,7 @@ export interface CustomersSelect<T extends boolean = true> {
         currentPeriodStart?: T;
         currentPeriodEnd?: T;
         firstActivatedAt?: T;
-        planAmount?: T;
-        currency?: T;
+        membership?: T;
       };
   membershipHistory?:
     | T
@@ -1415,6 +1432,18 @@ export interface ServiceChargesSelect<T extends boolean = true> {
   date?: T;
   currency?: T;
   status?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "membership_select".
+ */
+export interface MembershipSelect<T extends boolean = true> {
+  name?: T;
+  planAmount?: T;
+  currency?: T;
+  maxLevels?: T;
   updatedAt?: T;
   createdAt?: T;
 }

@@ -29,7 +29,7 @@ export const FormValuesSchema = z
       error: 'Confirma tu contraseña',
     }),
 
-    coupon: z.string().min(6).max(6).optional(),
+    //coupon: z.string().min(6).max(6),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {

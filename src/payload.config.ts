@@ -20,6 +20,7 @@ import { Coupons } from './collections/Coupons'
 import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Withdrawals } from './collections/Withdrawals'
 import ServiceCharges from './collections/ServiceCharges'
+import Membership from './collections/Memberships'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -80,6 +81,7 @@ export default buildConfig({
     Coupons,
     Withdrawals,
     ServiceCharges,
+    Membership,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

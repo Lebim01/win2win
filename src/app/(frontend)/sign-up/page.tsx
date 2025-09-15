@@ -194,6 +194,7 @@ const Signup = () => {
                   label="Cupón"
                   name="coupon"
                   variant="faded"
+                  defaultValue=""
                   isInvalid={error?.coupon && error?.coupon?.length > 0}
                   errorMessage={error.coupon ? error.coupon[0] : null}
                   isDisabled={loading}

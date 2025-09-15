@@ -1,5 +1,5 @@
 import { activete } from '@/business/memberships'
-import { Coupon, Customer } from '@/payload-types'
+import { Coupon } from '@/payload-types'
 import payloadConfig from '@payload-config'
 import { NextRequest, NextResponse } from 'next/server'
 import { createPayloadRequest, getPayload } from 'payload'

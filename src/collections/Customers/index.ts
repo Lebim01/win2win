@@ -3,7 +3,6 @@ import { hookAssignSponsorFromInviterCode } from './hooks'
 import { activete } from '@/business/memberships'
 import { redeemCouponAtomically } from '@/business/coupons'
 import { Coupon } from '@/payload-types'
-import { owner } from '@/access/owner'
 
 export const Customers: CollectionConfig = {
   slug: 'customers',
@@ -142,16 +141,12 @@ export const Customers: CollectionConfig = {
       name: 'membership',
       type: 'group',
       label: 'Membresía',
-      admin: {
-        readOnly: true,
-      },
       fields: [
         { name: 'isActive', type: 'checkbox', defaultValue: false, index: true },
         { name: 'currentPeriodStart', type: 'date' },
         { name: 'currentPeriodEnd', type: 'date', index: true },
         { name: 'firstActivatedAt', type: 'date' },
-        { name: 'planAmount', type: 'number', admin: { readOnly: true } },
-        { name: 'currency', type: 'text', defaultValue: 'USD', admin: { readOnly: true } },
+        { name: 'membership', type: 'relationship', relationTo: 'membership' },
       ],
     },
 

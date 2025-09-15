@@ -61,7 +61,7 @@ export async function ensureMembershipFlag(payload: BasePayload, customerId: str
 export async function activete(
   req: PayloadRequest,
   customerId: number,
-  amount: number,
+  membershipId: number,
   paymentRef?: any,
   meta?: any,
 ) {
@@ -93,13 +93,6 @@ export async function activete(
 
     const now = new Date()
 
-    // Validación de monto/currency (si forzas exacto 24.99 USD)
-    const amt = typeof amount === 'number' ? amount : MONTHLY_PRICE
-    const curr = CURRENCY
-    if (amt !== MONTHLY_PRICE || curr !== CURRENCY) {
-      throw `Monto/currency inválidos (esperado ${MONTHLY_PRICE} ${CURRENCY})`
-    }
-
     // Calcular periodo nuevo (o encadenado)
     const currentEnd = customer?.membership?.currentPeriodEnd || null
     const { periodStart, periodEnd } = computeNextPeriod(now, currentEnd)
@@ -118,8 +111,7 @@ export async function activete(
         currentPeriodStart: periodStart.toISOString(),
         currentPeriodEnd: periodEnd.toISOString(),
         firstActivatedAt,
-        planAmount: MONTHLY_PRICE,
-        currency: CURRENCY,
+        membership: membershipId,
       },
       membershipHistory: [
         ...(customer.membershipHistory || []),
@@ -155,9 +147,14 @@ export async function activete(
     }
 
     // Disparar dispercion de comisiones
+    const membership = await req.payload.findByID({
+      collection: 'membership',
+      id: membershipId,
+    })
     await distributeReferralPayouts(
       req.payload,
       customerId,
+      membership.planAmount!,
       `${customerId}:${periodStart.toISOString()}`,
     )
 
