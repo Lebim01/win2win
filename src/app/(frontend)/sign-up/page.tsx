@@ -10,7 +10,7 @@ import axios from 'axios'
 const Signup = () => {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const refCode = searchParams.get('refCode') as string
+  const refCode = searchParams.get('ref') as string
 
   const [error, setErrors] = useState<{
     name?: string[] | undefined
@@ -28,11 +28,13 @@ const Signup = () => {
   const [root, setRoot] = useState('')
 
   useEffect(() => {
-    axios.get(`/api/referrals/${refCode}`).then((r) => {
-      if (r.data.name) {
-        setRoot(r.data.name)
-      }
-    })
+    if (refCode) {
+      axios.get(`/api/referrals/${refCode}`).then((r) => {
+        if (r.data.name) {
+          setRoot(r.data.name)
+        }
+      })
+    }
   }, [refCode])
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
