@@ -59,7 +59,12 @@ export const getLoggedUser = async (
     }
   }
 
+  const loggedUser = await payload.findByID({
+    collection: 'customers',
+    id: user.id,
+  })
+
   return {
-    user: safeUser(user as CustomerWCollection),
+    user: safeUser(loggedUser as CustomerWCollection),
   }
 }

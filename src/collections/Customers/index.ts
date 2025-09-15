@@ -216,7 +216,7 @@ export const Customers: CollectionConfig = {
         })
 
         for (const c of customers.docs) {
-          await activete(req, c.id, 24.99)
+          await activete(req, c.id, 1)
         }
 
         return Response.json({
