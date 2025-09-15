@@ -19,24 +19,10 @@ import {
 } from '@heroui/react'
 import { diffNow } from '@/utilities/diffNow'
 import useMe from '@/hooks/useMe'
-import useCoupons from '@/hooks/useCoupons'
 import LoadingDashboard from './LoadingPage'
 import useAxios from '@/hooks/useAxios'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
-
-// Coupons
-type Coupon = {
-  id: string
-  code: string
-  amountOff: number
-  currency: string
-  redeemed: boolean
-  redeemedBy?: string | null
-  owner: string
-  expiresAt?: string | null // todos expiran a la misma fecha (global)
-  payoutEligible?: boolean
-}
 
 // --- Utility functions ---
 function formatCurrency(v: number | undefined, currency = 'USD') {
@@ -146,7 +132,11 @@ export default function Dashboard() {
           </CardHeader>
           <CardBody className="gap-2">
             <div className="text-sm opacity-80">
-              Plan: {formatCurrency(me.membership?.planAmount ?? 24.99, me.membership?.currency)}
+              Plan:{' '}
+              {formatCurrency(
+                me.membership?.membership?.planAmount ?? 24.99,
+                me.membership?.membership?.currency,
+              )}
             </div>
             <div className="text-sm opacity-80">
               Vence:{' '}
@@ -241,7 +231,9 @@ export default function Dashboard() {
             <div className="text-sm opacity-80">
               Ganancias por referidos: <b>ver billetera</b>
             </div>
-            <div className="text-sm opacity-80">Niveles pagados: 3</div>
+            <div className="text-sm opacity-80">
+              Niveles pagados: {me?.membership?.membership?.maxLevels || 3}
+            </div>
           </CardBody>
           <CardFooter>
             <Button as={Link} href="/wallet" variant="flat">
@@ -312,7 +304,10 @@ export default function Dashboard() {
                 </div>
                 <div>
                   Monto del plan:{' '}
-                  {formatCurrency(me.membership?.planAmount ?? 24.99, me.membership?.currency)}
+                  {formatCurrency(
+                    me.membership?.membership?.planAmount ?? 24.99,
+                    me.membership?.membership?.currency,
+                  )}
                 </div>
               </div>
             </Tab>

@@ -7,8 +7,12 @@ type Membership = {
   currentPeriodStart?: string
   currentPeriodEnd?: string
   firstActivatedAt?: string
-  planAmount?: number
-  currency?: string
+  membership?: {
+    id: number
+    maxLevels: number
+    planAmount: number
+    currency: string
+  }
 }
 
 export type CustomerMe = {
