@@ -241,7 +241,7 @@ export default function Dashboard() {
             <div className="text-sm opacity-80">
               Ganancias por referidos: <b>ver billetera</b>
             </div>
-            <div className="text-sm opacity-80">Niveles pagados: 7</div>
+            <div className="text-sm opacity-80">Niveles pagados: 3</div>
           </CardBody>
           <CardFooter>
             <Button as={Link} href="/wallet" variant="flat">
