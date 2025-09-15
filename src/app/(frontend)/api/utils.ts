@@ -62,6 +62,18 @@ export const getLoggedUser = async (
   const loggedUser = await payload.findByID({
     collection: 'customers',
     id: user.id,
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      membership: true,
+      createdAt: true,
+      referralCode: true,
+      root: true,
+      wallet: true,
+      membershipHistory: true,
+    },
+    depth: 3,
   })
 
   return {
