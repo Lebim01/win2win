@@ -15,7 +15,7 @@ export const Customers: CollectionConfig = {
         const url = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/verify/${token}`
 
         return `
-        Hola ${user.email}, verifica tu email haciendo click aquí: ${url}
+        Hola ${user.email}, verifica tu email haciendo click aquí: <a href="${url}">${url}</a>\n
         Después de verificar su correo electrónico, podrá iniciar sesión con éxito
         `
       },
