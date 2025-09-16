@@ -17,6 +17,9 @@ export const Customers: CollectionConfig = {
     useAsTitle: 'email',
     defaultColumns: ['email', 'name', 'referralCode', 'membership.isActive', 'wallet.balance'],
     hidden: ({ user }) => !user || user.collection !== 'admins',
+    components: {
+      beforeList: ['@/components/ActivateUser'],
+    },
   },
   access: {
     // Un admin puede ver todo; un customer solo se ve a sí mismo

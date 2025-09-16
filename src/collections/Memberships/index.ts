@@ -13,6 +13,7 @@ const Membership: CollectionConfig = {
       required: true,
     },
     { name: 'maxLevels', type: 'number', max: 7, min: 3, defaultValue: 3, required: true },
+    { name: 'bonus_direct_sale', type: 'checkbox', defaultValue: true },
   ],
 }
 

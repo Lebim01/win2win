@@ -7,8 +7,6 @@ export async function createMassCoupons(data: { quantity: number; owner: number 
   const payload = await getPayload({ config })
   const created = []
 
-  console.log({ data })
-
   try {
     for (let i = 1; i <= data.quantity; i++) {
       const coupon = await payload.create({

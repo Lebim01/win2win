@@ -15,6 +15,7 @@ import { MetaImageComponent as MetaImageComponent_a8a977ebc872c5d5ea7ee689724c08
 import { MetaDescriptionComponent as MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { PreviewComponent as PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860 } from '@payloadcms/plugin-seo/client'
 import { SlugComponent as SlugComponent_92cc057d0a2abb4f6cf0307edf59f986 } from '@/fields/slug/SlugComponent'
+import { default as default_1c850a9aea0fb8a0ea5b9f3a18813876 } from '@/components/ActivateUser'
 import { default as default_e4af3c7e754bcdf243cde60b3bea359d } from '@/components/GenerateBatchCoupons'
 import { default as default_bdf9b2e6f54479b5d482a59a7b6e0321 } from '@/components/ServicesIndicators'
 import { RowLabel as RowLabel_ec255a65fa6fa8d1faeb09cf35284224 } from '@/Header/RowLabel'
@@ -41,6 +42,7 @@ export const importMap = {
   "@payloadcms/plugin-seo/client#MetaDescriptionComponent": MetaDescriptionComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@payloadcms/plugin-seo/client#PreviewComponent": PreviewComponent_a8a977ebc872c5d5ea7ee689724c0860,
   "@/fields/slug/SlugComponent#SlugComponent": SlugComponent_92cc057d0a2abb4f6cf0307edf59f986,
+  "@/components/ActivateUser#default": default_1c850a9aea0fb8a0ea5b9f3a18813876,
   "@/components/GenerateBatchCoupons#default": default_e4af3c7e754bcdf243cde60b3bea359d,
   "@/components/ServicesIndicators#default": default_bdf9b2e6f54479b5d482a59a7b6e0321,
   "@/Header/RowLabel#RowLabel": RowLabel_ec255a65fa6fa8d1faeb09cf35284224,

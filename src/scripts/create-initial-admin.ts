@@ -23,6 +23,7 @@ export async function ensureRootAdmin(payload: Payload) {
     const doc = await payload.create({
       collection: 'admins',
       data: {
+        id: 1,
         email,
         password,
         name,

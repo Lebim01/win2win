@@ -743,6 +743,7 @@ export interface Membership {
   planAmount: number;
   currency: string;
   maxLevels: number;
+  bonus_direct_sale?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1444,6 +1445,7 @@ export interface MembershipSelect<T extends boolean = true> {
   planAmount?: T;
   currency?: T;
   maxLevels?: T;
+  bonus_direct_sale?: T;
   updatedAt?: T;
   createdAt?: T;
 }
