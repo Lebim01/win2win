@@ -20,16 +20,16 @@ const getImageURL = (image?: Media | Config['db']['defaultIDType'] | null) => {
 }
 
 export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise<Metadata> => {
-  const { doc } = args
-
   const ogImage =
     'https://static.readdy.ai/image/da204f4dc2e247fc653978545687da45/b09161570655f243310fa8a39e48e6dd.jfif'
   const title = 'Win2Win'
 
   return {
-    description: doc?.meta?.description,
+    description:
+      'Únete a la revolución digital y de entrenamiento. POSICIÓNATE Y GANA DE TODAS LAS PERSONAS QUE DISFRUTARÁN DEL SERVICIO A NIVEL INTERNACIONAL',
     openGraph: mergeOpenGraph({
-      description: doc?.meta?.description || '',
+      description:
+        'Únete a la revolución digital y de entrenamiento. POSICIÓNATE Y GANA DE TODAS LAS PERSONAS QUE DISFRUTARÁN DEL SERVICIO A NIVEL INTERNACIONAL',
       images: ogImage
         ? [
             {
@@ -38,7 +38,6 @@ export const generateMeta = async (args: { doc: Partial<Page> | null }): Promise
           ]
         : undefined,
       title,
-      url: Array.isArray(doc?.slug) ? doc?.slug.join('/') : '/',
     }),
     title,
   }
