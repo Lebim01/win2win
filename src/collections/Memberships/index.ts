@@ -3,6 +3,7 @@ import { CollectionConfig } from 'payload'
 const Membership: CollectionConfig = {
   slug: 'membership',
   admin: {
+    useAsTitle: 'name',
     description:
       'Las membresias no se pueden eliminar por seguridad, pero si se pueden crear y modificar',
   },

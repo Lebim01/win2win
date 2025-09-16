@@ -4,7 +4,6 @@ import AutoComplete from '../ui/autocompleteFromCollection'
 import { useState } from 'react'
 
 import { FaSpinner } from 'react-icons/fa'
-import activateMembership from '@/actions/activateMembership'
 
 const ActivateUser = () => {
   const [membership, setMembership] = useState(1)
@@ -17,9 +16,16 @@ const ActivateUser = () => {
     try {
       if (confirm('seguro')) {
         setLoading(true)
-        await activateMembership({
-          userId: owner,
-          membershipId: membership,
+        await fetch('/api/activateMembership', {
+          credentials: 'include',
+          method: 'POST',
+          body: JSON.stringify({
+            userId: owner,
+            membershipId: membership,
+          }),
+          headers: {
+            'Content-Type': 'application/json',
+          },
         })
         ;(e.target as HTMLFormElement).reset()
         toast.success('Activado!')

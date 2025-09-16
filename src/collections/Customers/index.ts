@@ -149,7 +149,12 @@ export const Customers: CollectionConfig = {
         { name: 'currentPeriodStart', type: 'date' },
         { name: 'currentPeriodEnd', type: 'date', index: true },
         { name: 'firstActivatedAt', type: 'date' },
-        { name: 'membership', type: 'relationship', relationTo: 'membership' },
+        {
+          name: 'membership',
+          type: 'relationship',
+          relationTo: 'membership',
+          admin: { allowCreate: false, allowEdit: false },
+        },
       ],
     },
 
@@ -158,7 +163,11 @@ export const Customers: CollectionConfig = {
       type: 'array',
       label: 'Historial de activaciones',
       labels: { singular: 'Activación', plural: 'Activaciones' },
-      admin: { description: 'Cada activación/renovación mensual', readOnly: true },
+      admin: {
+        description: 'Cada activación/renovación mensual',
+        readOnly: true,
+        initCollapsed: true,
+      },
       fields: [
         { name: 'activatedAt', type: 'date', required: true },
         { name: 'periodStart', type: 'date', required: true },
