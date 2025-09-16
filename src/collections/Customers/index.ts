@@ -3,6 +3,7 @@ import { hookAssignSponsorFromInviterCode } from './hooks'
 import { activete } from '@/business/memberships'
 import { redeemCouponAtomically } from '@/business/coupons'
 import { Coupon } from '@/payload-types'
+import { getServerSideURL } from '@/utilities/getURL'
 
 export const Customers: CollectionConfig = {
   slug: 'customers',
@@ -12,7 +13,7 @@ export const Customers: CollectionConfig = {
     tokenExpiration: 60 * 60 * 24 * 10, // 10 días
     verify: {
       generateEmailHTML: ({ req, token, user }) => {
-        const url = `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/verify/${token}`
+        const url = `${getServerSideURL()}/verify/${token}`
 
         return `
         Hola ${user.email}, verifica tu email haciendo click aquí: <a href="${url}">${url}</a>\n
