@@ -742,8 +742,19 @@ export interface Membership {
   name: string;
   planAmount: number;
   currency: string;
+  /**
+   * Si cambias este valor solo funciona para las nuevas personas que compren la membresia, las personas que ya tenian una no se ven afectadas
+   */
+  durationMonths: number;
   maxLevels: number;
+  /**
+   * Bono 10%
+   */
   bonus_direct_sale?: boolean | null;
+  /**
+   * El cliente puede ver esta membresia para comprarla
+   */
+  visible?: boolean | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1444,8 +1455,10 @@ export interface MembershipSelect<T extends boolean = true> {
   name?: T;
   planAmount?: T;
   currency?: T;
+  durationMonths?: T;
   maxLevels?: T;
   bonus_direct_sale?: T;
+  visible?: T;
   updatedAt?: T;
   createdAt?: T;
 }

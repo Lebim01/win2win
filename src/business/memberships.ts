@@ -2,27 +2,16 @@ import type { Admin, Customer } from '@/payload-types'
 import type { BasePayload, PayloadRequest } from 'payload'
 import { assign } from './referrals'
 import { distributeReferralPayouts } from './referral-payouts'
+import dayjs from 'dayjs'
 
 export const MONTHLY_PRICE = 24.99
 export const CURRENCY = 'USD'
-
-/** Suma 1 mes manteniendo día cuando sea posible */
-export function addOneMonth(d: Date) {
-  const dt = new Date(d)
-  const day = dt.getUTCDate()
-  dt.setUTCMonth(dt.getUTCMonth() + 1)
-  // Si el mes resultante no tiene ese día (p.ej. 31), ajusta al último día del mes
-  if (dt.getUTCDate() < day) {
-    dt.setUTCDate(0) // último del mes anterior
-  }
-  return dt
-}
 
 /** Devuelve [periodStart, periodEnd] para una activación/renovación:
  * - Si actualmente activo y renueva antes de vencer, el nuevo periodo inicia al final del actual (no pierde días).
  * - Si expirado/no activo, el periodo inicia ahora.
  */
-export function computeNextPeriod(now: Date, currentEnd?: string | null) {
+export function computeNextPeriod(now: Date, currentEnd?: string | null, addMonths = 1) {
   let periodStart = now
   if (currentEnd) {
     const end = new Date(currentEnd)
@@ -31,7 +20,7 @@ export function computeNextPeriod(now: Date, currentEnd?: string | null) {
       periodStart = end
     }
   }
-  const periodEnd = addOneMonth(periodStart)
+  const periodEnd = dayjs(periodStart).add(addMonths, 'month').toDate()
   return { periodStart, periodEnd }
 }
 
@@ -76,6 +65,11 @@ export async function activete(
       throw 'No autorizado'
     }
 
+    const membership = await req.payload.findByID({
+      collection: 'membership',
+      id: membershipId,
+    })
+
     // Cargar el cliente
     const customer = await req.payload.findByID({
       collection: 'customers',
@@ -95,7 +89,7 @@ export async function activete(
 
     // Calcular periodo nuevo (o encadenado)
     const currentEnd = customer?.membership?.currentPeriodEnd || null
-    const { periodStart, periodEnd } = computeNextPeriod(now, currentEnd)
+    const { periodStart, periodEnd } = computeNextPeriod(now, currentEnd, membership.durationMonths)
 
     // firstActivatedAt si es la primera vez
     const isFirstActivation = !customer?.membership?.firstActivatedAt
@@ -147,10 +141,6 @@ export async function activete(
     }
 
     // Disparar dispercion de comisiones
-    const membership = await req.payload.findByID({
-      collection: 'membership',
-      id: membershipId,
-    })
     await distributeReferralPayouts(
       req.payload,
       customerId,

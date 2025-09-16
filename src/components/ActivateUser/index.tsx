@@ -47,7 +47,7 @@ const ActivateUser = () => {
             <span>Membersia</span>
             <AutoComplete
               collection="membership"
-              key="id"
+              id="id"
               label="name"
               onChange={(id) => setMembership(id)}
             />
@@ -56,7 +56,7 @@ const ActivateUser = () => {
             <span>Dueño</span>
             <AutoComplete
               collection="customers"
-              key="id"
+              id="id"
               label="name"
               onChange={(owner) => setOwner(owner)}
             />

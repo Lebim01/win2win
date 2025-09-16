@@ -12,6 +12,7 @@ export const seedMemberships = async (payload: Payload) => {
       planAmount: 24.99,
       maxLevels: 3,
       bonus_direct_sale: false,
+      durationMonths: 1,
     },
   })
 
@@ -24,6 +25,7 @@ export const seedMemberships = async (payload: Payload) => {
       planAmount: 150,
       maxLevels: 4,
       bonus_direct_sale: true,
+      durationMonths: 1,
     },
   })
 
@@ -36,6 +38,7 @@ export const seedMemberships = async (payload: Payload) => {
       planAmount: 250,
       maxLevels: 4,
       bonus_direct_sale: true,
+      durationMonths: 1,
     },
   })
 
@@ -48,6 +51,7 @@ export const seedMemberships = async (payload: Payload) => {
       planAmount: 500,
       maxLevels: 5,
       bonus_direct_sale: true,
+      durationMonths: 1,
     },
   })
 

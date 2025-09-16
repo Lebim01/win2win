@@ -7,7 +7,7 @@ import { stringify } from 'qs-esm'
 
 type Props = {
   collection: keyof Config['collections']
-  key: string
+  id: string
   label: string
   onChange: (key: any) => void
 }
@@ -24,7 +24,7 @@ const AutoComplete: FC<Props> = (props) => {
           },
           select: {
             id: true,
-            [props.key]: true,
+            [props.id]: true,
             [props.label]: true,
           },
           limit: 10,
@@ -67,7 +67,7 @@ const AutoComplete: FC<Props> = (props) => {
         }}
       >
         {(item: any) => (
-          <AutocompleteItem key={item[props.key]}>{item[props.label]}</AutocompleteItem>
+          <AutocompleteItem key={item[props.id]}>{item[props.label]}</AutocompleteItem>
         )}
       </Autocomplete>
     </div>

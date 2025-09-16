@@ -49,6 +49,16 @@ const AdminSidemenu = (props: any) => {
               <span>Usuarios</span>
             </Button>
           </Link>
+          <Link href="/admin/collections/membership" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<RiCoupon3Fill size={16} />}
+              iconPosition="left"
+            >
+              <span>Membresias</span>
+            </Button>
+          </Link>
           <Link href="/admin" className="w-full no-underline">
             <Button
               className="flex w-full m-0"
