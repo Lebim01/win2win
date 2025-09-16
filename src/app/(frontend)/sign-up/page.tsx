@@ -126,6 +126,7 @@ const Signup = () => {
                   variant="faded"
                   isInvalid={error?.password && error?.password?.length > 0}
                   errorMessage={error.password ? error.password[0] : null}
+                  description="Debe incluir mayúsculas, minúsculas, número y símbolo"
                   endContent={
                     showPassword ? (
                       <FaRegEye
