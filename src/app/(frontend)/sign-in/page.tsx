@@ -1,11 +1,21 @@
 'use client'
 import { Button, Input } from '@heroui/react'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
-import { FormEventHandler } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { FormEventHandler, useEffect, useState } from 'react'
 
 const SignIn = () => {
   const router = useRouter()
+
+  const searchParams = useSearchParams()
+  const verify = searchParams.get('verify') as string
+  const [verified, setVerified] = useState<null | boolean>(null)
+
+  useEffect(() => {
+    if (verify) {
+      setVerified(verify == 'true')
+    }
+  }, [verify])
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
@@ -56,6 +66,13 @@ const SignIn = () => {
                 required
                 variant="faded"
               />
+
+              {verified !== null &&
+                (verified ? (
+                  <span className="text-green-400">Verificado correctamente</span>
+                ) : (
+                  <span className="text-red-400">La verificación falló</span>
+                ))}
 
               <Button type="submit" color="primary" fullWidth>
                 Sign in

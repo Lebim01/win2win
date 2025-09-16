@@ -8,9 +8,18 @@ export const Customers: CollectionConfig = {
   slug: 'customers',
   labels: { singular: 'Cliente', plural: 'Clientes' },
   auth: {
-    verify: true, // Envía email de verificación al registrarse
     maxLoginAttempts: 20,
     tokenExpiration: 60 * 60 * 24 * 10, // 10 días
+    verify: {
+      generateEmailHTML: ({ req, token, user }) => {
+        const url = `${process.env.VERCEL_PROJECT_PRODUCTION_URL}/verify?token=${token}`
+
+        return `
+        Hola ${user.email}, verifica tu email haciendo click aquí: ${url}
+        Después de verificar su correo electrónico, podrá iniciar sesión con éxito
+        `
+      },
+    },
   },
   defaultSort: 'id',
   admin: {
