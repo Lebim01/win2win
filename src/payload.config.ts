@@ -26,6 +26,7 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  serverURL: process.env.VERCEL_PROJECT_PRODUCTION_URL,
   admin: {
     components: {
       Nav: '@/components/AdminSidemenu',
