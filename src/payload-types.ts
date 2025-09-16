@@ -734,6 +734,8 @@ export interface Customer {
   password?: string | null;
 }
 /**
+ * Las membresias no se pueden eliminar por seguridad, pero si se pueden crear y modificar
+ *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "membership".
  */

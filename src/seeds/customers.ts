@@ -9,7 +9,7 @@ export const seedCustomers = async (payload: Payload) => {
   console.log('🌱 Seeding demo customers...')
 
   // 1) Crear ROOT (nivel 0)
-  const rootReferralCode = genCode()
+  const rootReferralCode = 'A4A123'
   const root = await payload.create({
     collection: 'customers',
     data: {
