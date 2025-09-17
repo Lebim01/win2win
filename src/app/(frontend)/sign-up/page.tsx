@@ -118,6 +118,7 @@ const Signup = () => {
                   isInvalid={error?.name && error?.name?.length > 0}
                   errorMessage={error.name ? error.name[0] : null}
                   isDisabled={loading}
+                  autoComplete="off"
                 />
 
                 <Input
@@ -145,6 +146,7 @@ const Signup = () => {
                     )
                   }
                   isDisabled={loading}
+                  autoComplete="off"
                 />
 
                 <Input
@@ -193,6 +195,7 @@ const Signup = () => {
                   isInvalid={error?.username && error?.username?.length > 0}
                   errorMessage={error.username ? error.username[0] : null}
                   isDisabled={loading}
+                  autoComplete="off"
                 />
 
                 <Input
