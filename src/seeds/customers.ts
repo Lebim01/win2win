@@ -15,6 +15,8 @@ export const seedCustomers = async (payload: Payload) => {
     data: {
       email: 'root@example.com',
       password: '11111111',
+      phone: '1111111111',
+      username: 'root',
       name: 'Root User',
       referralCode: rootReferralCode,
       level: 0,
@@ -42,6 +44,8 @@ export const seedCustomers = async (payload: Payload) => {
           password: '11111111',
           name: `Demo L${level} #${i + 1}`,
           referralCode,
+          phone: '1111111111',
+          username: referralCode,
 
           // 🔑 campos importantes
           inviterCode: rootReferralCode,
