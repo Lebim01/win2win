@@ -62,7 +62,6 @@ export async function GET(req: NextRequest) {
       totalPages: query.totalPages,
     })
   } catch (e: any) {
-    console.log(e)
     return NextResponse.json(
       { error: 'Fallo inesperado', details: String(e?.message || e) },
       { status: 500 },

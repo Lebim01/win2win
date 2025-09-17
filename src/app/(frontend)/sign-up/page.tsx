@@ -13,12 +13,14 @@ const Signup = () => {
   const [success, setSuccess] = useState(false)
 
   const [error, setErrors] = useState<{
-    name?: string[] | undefined
-    email?: string[] | undefined
-    password?: string[] | undefined
-    confirmPassword?: string[] | undefined
-    coupon?: string[] | undefined
-    form?: string[] | undefined
+    name?: string[]
+    email?: string[]
+    password?: string[]
+    confirmPassword?: string[]
+    coupon?: string[]
+    form?: string[]
+    username?: string[]
+    phone?: string[]
   }>({})
   const [loading, setLoading] = useState(false)
 
@@ -50,6 +52,8 @@ const Signup = () => {
       password: formData.get('password') as string,
       confirmPassword: formData.get('confirmPassword') as string,
       coupon: formData.get('coupon') as string,
+      username: formData.get('username') as string,
+      phone: formData.get('phone') as string,
     }
 
     const parsed = FormValuesSchema.safeParse(formValues)
@@ -180,7 +184,29 @@ const Signup = () => {
                   isDisabled={loading}
                 />
 
-                {root && (
+                <Input
+                  label="Usuario"
+                  name="username"
+                  isRequired
+                  required
+                  variant="faded"
+                  isInvalid={error?.username && error?.username?.length > 0}
+                  errorMessage={error.username ? error.username[0] : null}
+                  isDisabled={loading}
+                />
+
+                <Input
+                  label="Celular"
+                  name="phone"
+                  isRequired
+                  required
+                  variant="faded"
+                  isInvalid={error?.phone && error?.phone?.length > 0}
+                  errorMessage={error.phone ? error.phone[0] : null}
+                  isDisabled={loading}
+                />
+
+                {/*root && (
                   <Input
                     label="Cupón"
                     name="coupon"
@@ -190,7 +216,7 @@ const Signup = () => {
                     errorMessage={error.coupon ? error.coupon[0] : null}
                     isDisabled={loading}
                   />
-                )}
+                )*/}
 
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
