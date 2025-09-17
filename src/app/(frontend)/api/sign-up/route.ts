@@ -93,6 +93,8 @@ export async function POST(req: NextRequest) {
         name: body.name,
         password: body.password,
         root: root!.id,
+        username: body.username,
+        phone: body.phone,
         _verified: process.env.NODE_ENV == 'development',
       },
       disableVerificationEmail: process.env.NODE_ENV == 'development',

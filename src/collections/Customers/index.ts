@@ -62,6 +62,18 @@ export const Customers: CollectionConfig = {
     {
       name: 'name',
       type: 'text',
+      required: true,
+    },
+    {
+      name: 'username',
+      type: 'text',
+      required: true,
+      unique: true,
+    },
+    {
+      name: 'phone',
+      type: 'text',
+      required: true,
     },
     // Rol fijo para customers (no editable por el propio usuario)
     {

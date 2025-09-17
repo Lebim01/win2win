@@ -653,7 +653,9 @@ export interface Admin {
  */
 export interface Customer {
   id: number;
-  name?: string | null;
+  name: string;
+  username: string;
+  phone: string;
   role: 'customer';
   /**
    * Código único para referidos
@@ -1333,6 +1335,8 @@ export interface AdminsSelect<T extends boolean = true> {
  */
 export interface CustomersSelect<T extends boolean = true> {
   name?: T;
+  username?: T;
+  phone?: T;
   role?: T;
   referralCode?: T;
   inviterCode?: T;
