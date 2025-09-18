@@ -30,6 +30,26 @@ export async function POST(req: NextRequest) {
     }
 
     /**
+     * validar el username existente
+     */
+    const exists2 = await payload.find({
+      collection: 'customers',
+      where: {
+        username: {
+          equals: body.username,
+        },
+      },
+      limit: 1,
+    })
+
+    if (exists.totalDocs > 0) {
+      return NextResponse.json(
+        { error: 'Fallo inesperado', details: 'Usuario ya existe' },
+        { status: 500 },
+      )
+    }
+
+    /**
      * El cupón no es requerido, si viene sin cupón entonces cae en el
      * codigo #1 de la empresa y se va al derrame
      */
@@ -84,17 +104,6 @@ export async function POST(req: NextRequest) {
         )
       }
     }
-
-    console.log({
-      email: body.email,
-      role: 'customer',
-      name: body.name,
-      password: body.password,
-      root: root!.id,
-      username: body.username,
-      phone: body.phone,
-      _verified: process.env.NODE_ENV == 'development',
-    })
 
     const newuser = await payload.create({
       collection: 'customers',
