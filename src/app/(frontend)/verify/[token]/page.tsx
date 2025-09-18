@@ -21,11 +21,11 @@ const Verify = async (props: { params: Promise<{ token: string }> }) => {
       }
     } catch (err) {
       console.error(err)
-      return redirect('/sign-in?verify=false')
+      return redirect('/sign-in')
     }
   }
 
-  return redirect('/sign-in?verify=false')
+  return redirect('/sign-in')
 }
 
 export default Verify
