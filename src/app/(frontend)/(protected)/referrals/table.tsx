@@ -109,7 +109,7 @@ const TableDirects = () => {
             }
           >
             <TableHeader>
-              <TableColumn>Nombre</TableColumn>
+              <TableColumn>Nombre y apellido</TableColumn>
               <TableColumn>Telefono</TableColumn>
               <TableColumn>Email</TableColumn>
               <TableColumn>Membresia</TableColumn>
