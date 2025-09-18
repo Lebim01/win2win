@@ -9,6 +9,11 @@ export function middleware(request: NextRequest) {
   const url = new URL(request.url)
   const pathname = url.pathname
 
+  if (pathname == '/') {
+    const signinurl = new URL('/sign-in', request.url)
+    return NextResponse.redirect(signinurl)
+  }
+
   if (protected_routes.includes(pathname)) {
     const token = request.cookies.get('payload-token')?.value
 
