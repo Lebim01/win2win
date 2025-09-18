@@ -132,7 +132,7 @@ export async function POST(req: NextRequest) {
         })
         payloadr.user = { ...newuser, collection: 'customers' }
 
-        await activete(payloadr, newuser.id, 24.99, {
+        await activete(payloadr, newuser.id, 1, {
           coupon: body.coupon,
         })
         await payload.update({
