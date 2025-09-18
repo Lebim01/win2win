@@ -1,9 +1,11 @@
+import useMe from '@/hooks/useMe'
 import { logout } from '@/services/auth.service'
 import { Avatar, Dropdown, DropdownItem, DropdownMenu, DropdownTrigger } from '@heroui/react'
 import { useRouter } from 'next/navigation'
 
 const ProfileDropdown = () => {
   const router = useRouter()
+  const me = useMe()
 
   const _logout = async () => {
     await logout()
@@ -14,7 +16,7 @@ const ProfileDropdown = () => {
     <div>
       <Dropdown>
         <DropdownTrigger>
-          <Avatar name="Root" src="" className="hover:cursor-pointer" isBordered />
+          <Avatar name={me.data?.name} src="" className="hover:cursor-pointer" isBordered />
         </DropdownTrigger>
         <DropdownMenu aria-label="Static Actions">
           <DropdownItem key="new" href="/profile">
