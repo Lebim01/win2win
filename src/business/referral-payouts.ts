@@ -60,9 +60,11 @@ export async function distributeReferralPayouts(
       depth: 3,
     })
 
+    const upline_membership = upline_user.membership as Membership
+
     // TODO: agregar bono directo 10% de precio de membresia
     if (level == 1) {
-      if ((upline_user.membership?.membership as Membership).bonus_direct_sale) {
+      if (upline_membership.bonus_direct_sale) {
         await addPayout(
           payload,
           payerId,
@@ -75,7 +77,7 @@ export async function distributeReferralPayouts(
       }
     }
 
-    const MAX_LEVELS_USER = (upline_user.membership as Membership)?.maxLevels ?? 3
+    const MAX_LEVELS_USER = upline_membership?.maxLevels ?? 3
 
     if (upline_user.membership?.isActive && level <= MAX_LEVELS_USER) {
       await addPayout(

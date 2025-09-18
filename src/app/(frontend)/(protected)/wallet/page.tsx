@@ -283,6 +283,7 @@ function WalletPage(props: WalletProps) {
                   <TableHeader>
                     <TableColumn className="whitespace-nowrap">Fecha</TableColumn>
                     <TableColumn>Nivel</TableColumn>
+                    <TableColumn>Desc.</TableColumn>
                     <TableColumn>Usuario origen</TableColumn>
                     <TableColumn>Monto</TableColumn>
                     <TableColumn>Periodo</TableColumn>
@@ -293,6 +294,7 @@ function WalletPage(props: WalletProps) {
                       <TableRow key={c.id}>
                         <TableCell>{fmtDate(c.date)}</TableCell>
                         <TableCell>{c.level}</TableCell>
+                        <TableCell>{c.description}</TableCell>
                         <TableCell className="font-medium">{c.sourceUser}</TableCell>
                         <TableCell>{fmtCurrency(c.amount, balance.currency)}</TableCell>
                         <TableCell>{c.period}</TableCell>

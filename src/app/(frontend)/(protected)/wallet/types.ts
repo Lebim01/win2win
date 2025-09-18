@@ -38,4 +38,5 @@ export type CommissionRow = {
   amount: Money
   period: string // AAAA-MM
   status: 'accrued' | 'paid' | 'reversed'
+  description: string
 }
