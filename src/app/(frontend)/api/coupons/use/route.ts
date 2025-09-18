@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         /**
          * el cupon solo se puede usar para inscribirse con el dueño del cupon
          */
-        if (couponDocs.docs[0].owner == user!.root) {
+        if (couponDocs.docs[0].owner == ((user!.root as Customer)?.id ?? user?.root)) {
           coupon = couponDocs.docs[0]
         } else {
           return NextResponse.json(
