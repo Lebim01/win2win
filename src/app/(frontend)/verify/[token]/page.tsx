@@ -16,11 +16,8 @@ const Verify = async (props: { params: Promise<{ token: string }> }) => {
         token,
       })
 
-      if (res) {
-        return redirect('/sign-in?verify=true')
-      }
+      return redirect('/sign-in?verify=true')
     } catch (err) {
-      console.error(err)
       return redirect('/sign-in?verify=false')
     }
   }
