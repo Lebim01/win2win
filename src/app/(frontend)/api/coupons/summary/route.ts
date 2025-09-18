@@ -54,7 +54,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       total: count.totalDocs,
       used: countUsed.totalDocs,
-      expires_at: response_query.docs[0].expiresAt,
+      expires_at: response_query.totalDocs > 0 ? response_query.docs[0]?.expiresAt : null,
     })
   } catch (e: any) {
     console.log(e)
