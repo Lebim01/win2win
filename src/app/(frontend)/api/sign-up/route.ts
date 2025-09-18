@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
      * El cupón no es requerido, si viene sin cupón entonces cae en el
      * codigo #1 de la empresa y se va al derrame
      */
-    const refCode = body.refCode ?? ''
+    const refCode = body.refCode || ''
     const root = await payload
       .find({
         collection: 'customers',
@@ -85,6 +85,17 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    console.log({
+      email: body.email,
+      role: 'customer',
+      name: body.name,
+      password: body.password,
+      root: root!.id,
+      username: body.username,
+      phone: body.phone,
+      _verified: process.env.NODE_ENV == 'development',
+    })
+
     const newuser = await payload.create({
       collection: 'customers',
       data: {
@@ -94,6 +105,7 @@ export async function POST(req: NextRequest) {
         password: body.password,
         root: root!.id,
         username: body.username,
+        inviterCode: body.refCode,
         phone: body.phone,
         _verified: process.env.NODE_ENV == 'development',
       },
