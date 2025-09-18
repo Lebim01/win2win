@@ -1,3 +1,4 @@
+import { Membership } from '@/payload-types'
 import axios from 'axios'
 
 export const getChild = async (id: number) => {
@@ -26,11 +27,13 @@ export type ResponseDirects = {
     id: number
     name: string
     email: string
+    phone: string
     membership: {
       isActive: boolean
       currentPeriodEnd: string | null
       currentPeriodStart: string | null
       firstActivatedAt: string | null
+      membership: Membership
     }
   }[]
 }

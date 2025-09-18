@@ -43,7 +43,7 @@ export async function GET(req: NextRequest) {
         },
         ...addWhere,
       },
-      depth: 0,
+      depth: 1,
       page: searchParams.has('page') ? Number(searchParams.get('page')) : 1,
       limit: 10,
       sort: '-createdAt',
@@ -53,6 +53,7 @@ export async function GET(req: NextRequest) {
         email: true,
         membership: true,
         createdAt: true,
+        phone: true,
       },
     })
 

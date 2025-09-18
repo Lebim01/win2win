@@ -20,6 +20,7 @@ import {
 import { Filter, RefreshCcw } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { getDirects, ResponseDirects } from '@/services/referrals.service'
+import { Membership } from '@/payload-types'
 
 const Label = ({ children }: any) => <p className="font-medium mb-1">{children}</p>
 
@@ -109,7 +110,9 @@ const TableDirects = () => {
           >
             <TableHeader>
               <TableColumn>Nombre</TableColumn>
+              <TableColumn>Telefono</TableColumn>
               <TableColumn>Email</TableColumn>
+              <TableColumn>Membresia</TableColumn>
               <TableColumn>Fin del periodo</TableColumn>
               <TableColumn>Estado</TableColumn>
             </TableHeader>
@@ -117,7 +120,9 @@ const TableDirects = () => {
               {directs.docs.map((c) => (
                 <TableRow key={c.id}>
                   <TableCell>{c.name}</TableCell>
+                  <TableCell>{c.phone}</TableCell>
                   <TableCell>{c.email}</TableCell>
+                  <TableCell>{(c.membership.membership as Membership)?.name}</TableCell>
                   <TableCell>
                     {c.membership?.firstActivatedAt && (
                       <>
