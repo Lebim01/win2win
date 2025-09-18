@@ -25,7 +25,15 @@ export const Customers: CollectionConfig = {
   defaultSort: 'id',
   admin: {
     useAsTitle: 'email',
-    defaultColumns: ['email', 'name', 'referralCode', 'membership.isActive', 'wallet.balance'],
+    defaultColumns: [
+      'username',
+      'email',
+      'name',
+      'referralCode',
+      'membership.membership',
+      'membership.isActive',
+      'wallet.balance',
+    ],
     hidden: ({ user }) => !user || user.collection !== 'admins',
     components: {
       beforeList: ['@/components/ActivateUser'],
