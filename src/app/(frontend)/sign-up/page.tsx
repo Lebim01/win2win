@@ -7,21 +7,24 @@ import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa'
 import Link from 'next/link'
 import axios from 'axios'
 
+type FieldKey =
+  | 'name'
+  | 'email'
+  | 'password'
+  | 'confirmPassword'
+  | 'coupon'
+  | 'username'
+  | 'phone'
+  | 'form'
+
+type Errors = Partial<Record<FieldKey, string[]>>
+
 const Signup = () => {
   const searchParams = useSearchParams()
   const refCode = searchParams.get('ref') as string
   const [success, setSuccess] = useState(false)
 
-  const [error, setErrors] = useState<{
-    name?: string[]
-    email?: string[]
-    password?: string[]
-    confirmPassword?: string[]
-    coupon?: string[]
-    form?: string[]
-    username?: string[]
-    phone?: string[]
-  }>({})
+  const [error, setErrors] = useState<Errors>({})
   const [loading, setLoading] = useState(false)
 
   const [showPassword, setShowPassword] = useState(false)
@@ -29,72 +32,99 @@ const Signup = () => {
 
   const [root, setRoot] = useState('')
 
+  // estado controlado del formulario
+  const [values, setValues] = useState({
+    name: '',
+    email: '',
+    password: '',
+    confirmPassword: '',
+    coupon: '',
+    username: '',
+    phone: '',
+  })
+
+  // dirty: marca si el usuario ya interactuó con el campo
+  const [dirty, setDirty] = useState<Partial<Record<FieldKey, boolean>>>({})
+
   useEffect(() => {
     if (refCode) {
       axios.get(`/api/referrals/${refCode}`).then((r) => {
-        if (r.data.name) {
-          setRoot(r.data.name)
-        }
+        if (r.data.name) setRoot(r.data.name)
       })
     }
   }, [refCode])
+
+  // helpers para limpiar errores por campo cuando se modifica
+  const clearFieldError = (key: FieldKey) => {
+    setErrors((prev) => {
+      const { [key]: _omit, ...rest } = prev
+      return rest
+    })
+  }
+
+  // onChange genérico: marca dirty, limpia error del campo (y dependientes si aplica) y setea el valor
+  const handleChange = (key: Exclude<FieldKey, 'form'>) => (val: string) => {
+    setValues((v) => ({ ...v, [key]: val }))
+    if (!dirty[key]) setDirty((d) => ({ ...d, [key]: true }))
+
+    // limpiar error del propio campo
+    clearFieldError(key)
+
+    // si cambia password, también conviene limpiar el error de confirmPassword
+    if (key === 'password') {
+      clearFieldError('confirmPassword')
+    }
+  }
+
+  // también marcamos dirty en blur (por si el usuario pega y sale del campo)
+  const handleBlur = (key: Exclude<FieldKey, 'form'>) => {
+    if (!dirty[key]) setDirty((d) => ({ ...d, [key]: true }))
+  }
 
   const onSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
     setErrors({})
 
-    const form = e.currentTarget
-    const formData = new FormData(form)
+    const parsed = FormValuesSchema.safeParse(values)
+    if (!parsed.success) {
+      // errores por campo (solo mostramos si el campo ya es dirty o al enviar)
+      const fieldErrors = parsed.error.flatten().fieldErrors as Errors
 
-    const formValues = {
-      name: formData.get('name') as string,
-      email: formData.get('email') as string,
-      password: formData.get('password') as string,
-      confirmPassword: formData.get('confirmPassword') as string,
-      coupon: formData.get('coupon') as string,
-      username: formData.get('username') as string,
-      phone: formData.get('phone') as string,
+      // Si quieres ocultar errores de campos que no están dirty, filtra aquí:
+      const filtered: Errors = {}
+      ;(Object.keys(fieldErrors) as FieldKey[]).forEach((k) => {
+        const msgs = fieldErrors[k]
+        if (!msgs || msgs.length === 0) return
+        // mostrar siempre en submit:
+        filtered[k] = msgs
+      })
+
+      setErrors(filtered)
+      return
     }
 
-    console.log(formValues)
+    const valuesOk = parsed.data
 
-    const parsed = FormValuesSchema.safeParse(formValues)
-    if (!parsed.success) {
-      // errores por campo
-      console.log(parsed.error.flatten().fieldErrors)
-      setErrors(parsed.error.flatten().fieldErrors)
-    } else {
-      const values = parsed.data
+    try {
+      setLoading(true)
+      const response = await axios.post(
+        '/api/sign-up',
+        {
+          ...valuesOk,
+          refCode,
+        },
+        { withCredentials: true },
+      )
 
-      try {
-        setLoading(true)
-        const response = await axios.post(
-          '/api/sign-up',
-          {
-            ...values,
-            refCode,
-          },
-          {
-            withCredentials: true,
-          },
-        )
-
-        if (response.data.ok) {
-          setSuccess(true)
-        }
-      } catch (err: any) {
-        if (err.response?.data?.details) {
-          setErrors({
-            form: ['Error: ' + err.response.data.details],
-          })
-        } else {
-          setErrors({
-            form: ['Error inesperado, intenta mas tarde'],
-          })
-        }
-      } finally {
-        setLoading(false)
+      if (response.data.ok) setSuccess(true)
+    } catch (err: any) {
+      if (err.response?.data?.details) {
+        setErrors({ form: ['Error: ' + err.response.data.details] })
+      } else {
+        setErrors({ form: ['Error inesperado, intenta más tarde'] })
       }
+    } finally {
+      setLoading(false)
     }
   }
 
@@ -108,7 +138,7 @@ const Signup = () => {
                 <span className="text-blue-300 font-light">Patrocinador: {root}</span>
               )}
               <h1 className="text-xl font-bold leading-tight tracking-tight">Create an account</h1>
-              <form className="space-y-4" onSubmit={onSubmit}>
+              <form className="space-y-4" onSubmit={onSubmit} noValidate>
                 <Input
                   label="Correo"
                   name="email"
@@ -117,8 +147,11 @@ const Signup = () => {
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.name && error?.name?.length > 0}
-                  errorMessage={error.name ? error.name[0] : null}
+                  value={values.email}
+                  onValueChange={handleChange('email')}
+                  onBlur={() => handleBlur('email')}
+                  isInvalid={!!error.email && error.email.length > 0}
+                  errorMessage={error.email ? error.email[0] : null}
                   isDisabled={loading}
                   autoComplete="off"
                 />
@@ -127,11 +160,13 @@ const Signup = () => {
                   label="Contraseña"
                   name="password"
                   type={showPassword ? 'text' : 'password'}
-                  placeholder=""
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.password && error?.password?.length > 0}
+                  value={values.password}
+                  onValueChange={handleChange('password')}
+                  onBlur={() => handleBlur('password')}
+                  isInvalid={!!error.password && error.password.length > 0}
                   errorMessage={error.password ? error.password[0] : null}
                   description="Debe incluir mayúsculas, minúsculas, número y símbolo"
                   endContent={
@@ -155,11 +190,13 @@ const Signup = () => {
                   label="Confirmar Contraseña"
                   name="confirmPassword"
                   type={showConfirmPassword ? 'text' : 'password'}
-                  placeholder=""
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.confirmPassword && error?.confirmPassword?.length > 0}
+                  value={values.confirmPassword}
+                  onValueChange={handleChange('confirmPassword')}
+                  onBlur={() => handleBlur('confirmPassword')}
+                  isInvalid={!!error.confirmPassword && error.confirmPassword.length > 0}
                   errorMessage={error.confirmPassword ? error.confirmPassword[0] : null}
                   endContent={
                     showConfirmPassword ? (
@@ -183,7 +220,10 @@ const Signup = () => {
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.name && error?.name?.length > 0}
+                  value={values.name}
+                  onValueChange={handleChange('name')}
+                  onBlur={() => handleBlur('name')}
+                  isInvalid={!!error.name && error.name.length > 0}
                   errorMessage={error.name ? error.name[0] : null}
                   isDisabled={loading}
                 />
@@ -194,7 +234,10 @@ const Signup = () => {
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.username && error?.username?.length > 0}
+                  value={values.username}
+                  onValueChange={handleChange('username')}
+                  onBlur={() => handleBlur('username')}
+                  isInvalid={!!error.username && error.username.length > 0}
                   errorMessage={error.username ? error.username[0] : null}
                   isDisabled={loading}
                   autoComplete="off"
@@ -206,22 +249,28 @@ const Signup = () => {
                   isRequired
                   required
                   variant="faded"
-                  isInvalid={error?.phone && error?.phone?.length > 0}
+                  value={values.phone}
+                  onValueChange={handleChange('phone')}
+                  onBlur={() => handleBlur('phone')}
+                  isInvalid={!!error.phone && error.phone.length > 0}
                   errorMessage={error.phone ? error.phone[0] : null}
                   isDisabled={loading}
                 />
 
-                {/*root && (
+                {/* Si usas cupón cuando haya root, descomenta y deja controlado:
+                {root && (
                   <Input
                     label="Cupón"
                     name="coupon"
                     variant="faded"
-                    defaultValue=""
-                    isInvalid={error?.coupon && error?.coupon?.length > 0}
+                    value={values.coupon}
+                    onValueChange={handleChange('coupon')}
+                    onBlur={() => handleBlur('coupon')}
+                    isInvalid={!!error.coupon && error.coupon.length > 0}
                     errorMessage={error.coupon ? error.coupon[0] : null}
                     isDisabled={loading}
                   />
-                )*/}
+                )}*/}
 
                 <div className="flex items-start">
                   <div className="flex items-center h-5">
@@ -246,14 +295,17 @@ const Signup = () => {
                     </label>
                   </div>
                 </div>
+
                 {error.form && error.form.length > 0 && (
                   <div className="text-center">
                     <span className="text-red-400">{error.form[0]}</span>
                   </div>
                 )}
+
                 <Button type="submit" color="primary" fullWidth isLoading={loading}>
                   Create an account
                 </Button>
+
                 <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                   Already have an account?{' '}
                   <Link
@@ -266,6 +318,7 @@ const Signup = () => {
               </form>
             </div>
           )}
+
           {success && (
             <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
               <span className="text-green-400">
