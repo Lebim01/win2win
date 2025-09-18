@@ -136,7 +136,6 @@ export async function assign(req: PayloadRequest, childId: number, rootId: numbe
       id: childId,
       data: {
         referredBy: parentId,
-        root: rootId,
         level,
         ancestors,
       },
