@@ -134,9 +134,7 @@ export default function Dashboard() {
 
                 <img
                   src={selectedMembership.qr.image.url}
-                  height={150}
-                  width={150}
-                  className="object-cover object-top"
+                  className="object-cover object-center w-1/2 aspect-video"
                 />
 
                 <p>Red: {selectedMembership.qr.network} (POLYGON)</p>
