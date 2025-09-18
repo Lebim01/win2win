@@ -12,7 +12,7 @@ export async function createMassCoupons(data: { quantity: number; owner: number 
       const coupon = await payload.create({
         collection: 'coupons',
         data: {
-          owner: data.owner,
+          owner: Number(data.owner),
         },
       })
       created.push({
