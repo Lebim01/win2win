@@ -21,7 +21,12 @@ export async function POST(req: NextRequest) {
         collection: 'coupons',
         limit: 1,
         where: {
-          code: body.coupon,
+          code: {
+            equals: body.coupon,
+          },
+          redeemed: {
+            equals: false,
+          },
         },
       })
 
