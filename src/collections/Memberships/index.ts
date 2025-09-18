@@ -60,6 +60,30 @@ const Membership: CollectionConfig = {
         description: 'El cliente puede ver esta membresia para comprarla',
       },
     },
+    {
+      label: 'QR',
+      name: 'qr',
+      type: 'group',
+      fields: [
+        {
+          name: 'network',
+          type: 'text',
+          defaultValue: 'ERC20',
+          admin: {
+            readOnly: true,
+          },
+        },
+        {
+          name: 'image',
+          type: 'upload',
+          relationTo: 'media',
+        },
+        {
+          name: 'address',
+          type: 'text',
+        },
+      ],
+    },
   ],
 }
 

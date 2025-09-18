@@ -13,7 +13,7 @@ export const Customers: CollectionConfig = {
     tokenExpiration: 60 * 60 * 24 * 10, // 10 días
     verify: {
       generateEmailHTML: ({ req, token, user }) => {
-        const url = `${getServerSideURL()}/verify/${token}`
+        const url = `${getServerSideURL()}verify/${token}`
 
         return `
         Hola ${user.email}, verifica tu email haciendo click aquí: <a href="${url}">${url}</a>\n

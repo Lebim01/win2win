@@ -36,7 +36,7 @@ export type CustomerMe = {
 // --- Data hooks (replace with your real fetchers) ---
 async function fetchMe(): Promise<CustomerMe> {
   const res = await fetch(`/api/me`, { credentials: 'include' })
-  if (res.status == 401) await logout()
+  if (res.status == 401 || res.status == 500) await logout()
   if (!res.ok) throw new Error('Failed to load user')
   return res.json()
 }

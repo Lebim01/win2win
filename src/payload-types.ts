@@ -759,6 +759,11 @@ export interface Membership {
    * El cliente puede ver esta membresia para comprarla
    */
   visible?: boolean | null;
+  qr?: {
+    network?: string | null;
+    image?: (number | null) | Media;
+    address?: string | null;
+  };
   updatedAt: string;
   createdAt: string;
 }
@@ -1465,6 +1470,13 @@ export interface MembershipSelect<T extends boolean = true> {
   maxLevels?: T;
   bonus_direct_sale?: T;
   visible?: T;
+  qr?:
+    | T
+    | {
+        network?: T;
+        image?: T;
+        address?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

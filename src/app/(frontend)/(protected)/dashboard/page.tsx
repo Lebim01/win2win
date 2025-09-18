@@ -16,6 +16,12 @@ import {
   Avatar,
   Tabs,
   Tab,
+  Modal,
+  useDisclosure,
+  ModalHeader,
+  ModalContent,
+  ModalBody,
+  ModalFooter,
 } from '@heroui/react'
 import { diffNow } from '@/utilities/diffNow'
 import useMe from '@/hooks/useMe'
@@ -23,6 +29,7 @@ import LoadingDashboard from './LoadingPage'
 import useAxios from '@/hooks/useAxios'
 import axios from 'axios'
 import { useRouter } from 'next/navigation'
+import clsx from 'clsx'
 
 // --- Utility functions ---
 function formatCurrency(v: number | undefined, currency = 'USD') {
@@ -61,6 +68,14 @@ export default function Dashboard() {
     form?: string[] | undefined
   }>({})
   const [loadingActive, setLoadingActivate] = useState(false)
+
+  const memberships = useAxios({
+    url: '/api/memberships',
+  })
+
+  const [selectedMembership, setSelectedMembership] = useState<any>(null)
+
+  const { isOpen, onOpen, onOpenChange } = useDisclosure()
 
   if (loading || loadingCoupons) return <LoadingDashboard />
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
@@ -105,6 +120,36 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto p-4 md:p-6 md:px-0 md:py-12 grid gap-4">
+      <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+        <ModalContent>
+          {(onClose) => (
+            <>
+              <ModalHeader className="flex flex-col gap-1">
+                Pagar {selectedMembership.name}
+              </ModalHeader>
+              <ModalBody className="flex flex-col items-center">
+                <p>$ {selectedMembership.planAmount} USD</p>
+
+                <img
+                  src={selectedMembership.qr.image.url}
+                  height={150}
+                  width={150}
+                  className="object-cover object-top"
+                />
+
+                <p>Red: {selectedMembership.qr.network} (POLYGON)</p>
+                <p>{selectedMembership.qr.address}</p>
+              </ModalBody>
+              <ModalFooter>
+                <Button color="danger" variant="light" onPress={onClose}>
+                  Close
+                </Button>
+              </ModalFooter>
+            </>
+          )}
+        </ModalContent>
+      </Modal>
+
       <div className="flex items-center gap-3">
         <Avatar name={me.name || me.email} />
         <div>
@@ -134,7 +179,7 @@ export default function Dashboard() {
             <div className="text-sm opacity-80">
               Plan:{' '}
               {formatCurrency(
-                me.membership?.membership?.planAmount ?? 24.99,
+                me.membership?.membership?.planAmount,
                 me.membership?.membership?.currency,
               )}
             </div>
@@ -157,17 +202,19 @@ export default function Dashboard() {
           <CardFooter className="justify-between gap-2">
             {!isActive && !me.membership?.firstActivatedAt && (
               <>
-                <form onSubmit={onSubmitCoupon}>
-                  <Input
-                    size="sm"
-                    name="coupon"
-                    label="Cupón"
-                    placeholder="ABC123"
-                    className="max-w-xs"
-                  />
-                  <Button color={'primary'} isLoading={loadingActive}>
-                    Activar membresía
-                  </Button>
+                <form onSubmit={onSubmitCoupon} className="w-full flex flex-col gap-2">
+                  <div className="flex gap-2">
+                    <Input
+                      size="sm"
+                      name="coupon"
+                      label="Cupón"
+                      placeholder="ABC123"
+                      className="max-w-xs"
+                    />
+                    <Button color={'primary'} isLoading={loadingActive} className="w-full">
+                      Activar membresía
+                    </Button>
+                  </div>
                   {errorCoupon?.coupon && errorCoupon?.coupon?.length > 0 && (
                     <span className="text-red-400">
                       {errorCoupon.coupon ? errorCoupon.coupon[0] : null}
@@ -189,58 +236,89 @@ export default function Dashboard() {
           </CardFooter>
         </Card>
 
-        <Card shadow="sm">
-          <CardHeader className="justify-between">
-            <div className="font-semibold">Tu enlace de referidos</div>
-            <Chip variant="flat" color="secondary">
-              Código: {me.referralCode || '—'}
-            </Chip>
-          </CardHeader>
-          <CardBody className="gap-3">
-            <Snippet
-              symbol=""
-              codeString={referralLink}
-              className="w-full"
-              classNames={{
-                pre: 'line-clamp-1 overflow-auto',
-              }}
-            >
-              {referralLink || 'Genera tu código'}
-            </Snippet>
-            <div className="text-sm opacity-70">
-              Comparte este enlace para invitar y ganar $2 por nivel hasta 7 niveles.
-            </div>
-          </CardBody>
-          <CardFooter>
-            <Button as={Link} href="/referrals" variant="flat">
-              Ver árbol de referidos
-            </Button>
-          </CardFooter>
-        </Card>
+        {me.membership?.firstActivatedAt && (
+          <>
+            <Card shadow="sm">
+              <CardHeader className="justify-between">
+                <div className="font-semibold">Tu enlace de referidos</div>
+                <Chip variant="flat" color="secondary">
+                  Código: {me.referralCode || '—'}
+                </Chip>
+              </CardHeader>
+              <CardBody className="gap-3">
+                <Snippet
+                  symbol=""
+                  codeString={referralLink}
+                  className="w-full"
+                  classNames={{
+                    pre: 'line-clamp-1 overflow-auto',
+                  }}
+                >
+                  {referralLink || 'Genera tu código'}
+                </Snippet>
+                <div className="text-sm opacity-70">
+                  Comparte este enlace para invitar y ganar $2 por nivel hasta 7 niveles.
+                </div>
+              </CardBody>
+              <CardFooter>
+                <Button as={Link} href="/referrals" variant="flat">
+                  Ver árbol de referidos
+                </Button>
+              </CardFooter>
+            </Card>
 
-        <Card shadow="sm">
-          <CardHeader className="justify-between">
-            <div className="font-semibold">Resumen de referidos</div>
-            <Tooltip content="Total de personas referidas directamente">
-              <Chip color="primary" variant="flat">
-                {me.referredCount ?? me.childrenCount ?? 0} directos
-              </Chip>
-            </Tooltip>
-          </CardHeader>
-          <CardBody className="gap-2">
-            <div className="text-sm opacity-80">
-              Ganancias por referidos: <b>ver billetera</b>
+            <Card shadow="sm">
+              <CardHeader className="justify-between">
+                <div className="font-semibold">Resumen de referidos</div>
+                <Tooltip content="Total de personas referidas directamente">
+                  <Chip color="primary" variant="flat">
+                    {me.referredCount ?? me.childrenCount ?? 0} directos
+                  </Chip>
+                </Tooltip>
+              </CardHeader>
+              <CardBody className="gap-2">
+                <div className="text-sm opacity-80">
+                  Ganancias por referidos: <b>ver billetera</b>
+                </div>
+                <div className="text-sm opacity-80">
+                  Niveles pagados: {me?.membership?.membership?.maxLevels || 3}
+                </div>
+              </CardBody>
+              <CardFooter>
+                <Button as={Link} href="/wallet" variant="flat">
+                  Ir a billetera
+                </Button>
+              </CardFooter>
+            </Card>
+          </>
+        )}
+
+        {!me.membership?.firstActivatedAt && (
+          <Card
+            className={clsx(
+              'p-4 flex flex-col gap-4',
+              me.membership?.firstActivatedAt && 'md:col-span-3',
+              !me.membership?.firstActivatedAt && 'md:col-span-2',
+            )}
+          >
+            <span className="font-bold">Elige tu membresia</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 h-full">
+              {(memberships?.data as any[]).map((m) => (
+                <div
+                  key={m.id}
+                  className="p-2 flex flex-col items-center justify-center bg-neutral-300 dark:bg-neutral-600 h-full rounded-md hover:bg-amber-200 hover:text-black transition-all hover:cursor-pointer"
+                  onClick={() => {
+                    setSelectedMembership(m)
+                    onOpenChange()
+                  }}
+                >
+                  <span className="text-lg font-bold">{m.name}</span>
+                  <span className="text-xs">${m.planAmount} USD</span>
+                </div>
+              ))}
             </div>
-            <div className="text-sm opacity-80">
-              Niveles pagados: {me?.membership?.membership?.maxLevels || 3}
-            </div>
-          </CardBody>
-          <CardFooter>
-            <Button as={Link} href="/wallet" variant="flat">
-              Ir a billetera
-            </Button>
-          </CardFooter>
-        </Card>
+          </Card>
+        )}
       </div>
 
       {/* Promotions & activity */}
@@ -305,7 +383,7 @@ export default function Dashboard() {
                 <div>
                   Monto del plan:{' '}
                   {formatCurrency(
-                    me.membership?.membership?.planAmount ?? 24.99,
+                    me.membership?.membership?.planAmount,
                     me.membership?.membership?.currency,
                   )}
                 </div>
