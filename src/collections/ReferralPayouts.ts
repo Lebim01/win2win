@@ -18,6 +18,7 @@ export const ReferralPayouts: CollectionConfig = {
     { name: 'level', type: 'number', required: true, min: 1, max: 7, index: true },
     { name: 'amount', type: 'number', required: true }, // 2.00
     { name: 'currency', type: 'text', defaultValue: 'USD' },
+    { name: 'description', type: 'text' },
     { name: 'meta', type: 'json' },
   ],
   timestamps: true,

@@ -54,7 +54,7 @@ const GenerateBatchCoupons = () => {
             <AutoComplete
               collection="customers"
               id="id"
-              label="name"
+              label="username"
               onChange={(owner) => setOwner(owner)}
             />
           </div>

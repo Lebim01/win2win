@@ -49,8 +49,6 @@ export async function distributeReferralPayouts(
   // Para niveles: level 1 = parent, level 2 = abuelo, etc.
   const upline = ancestors.slice().reverse().slice(0, MAX_LEVELS)
 
-  // TODO: agregar bono directo 10% de precio de membresia
-
   let created = 0
   for (let i = 0; i < upline.length; i++) {
     const payeeId = upline[i]
@@ -59,45 +57,82 @@ export async function distributeReferralPayouts(
     const upline_user = await payload.findByID({
       collection: 'customers',
       id: payeeId,
+      depth: 3,
     })
+
+    // TODO: agregar bono directo 10% de precio de membresia
+    if (level == 1) {
+      if ((upline_user.membership?.membership as Membership).bonus_direct_sale) {
+        await addPayout(
+          payload,
+          payerId,
+          payeeId,
+          level,
+          'Bono directo',
+          membershipPrice * 0.1,
+          activationKey,
+        )
+      }
+    }
 
     const MAX_LEVELS_USER = (upline_user.membership as Membership)?.maxLevels ?? 3
 
     if (upline_user.membership?.isActive && level <= MAX_LEVELS_USER) {
-      // Crear payout
-      await payload.create({
-        collection: 'referral_payouts',
-        data: {
-          activationKey,
-          payer: payerId,
-          payee: payeeId,
-          level,
-          amount: COMMISSION_PER_LEVEL,
-          currency: CURRENCY,
-        },
-        depth: 0,
-      })
-
-      // Acreditar en el wallet del payee (incremento funcional)
-      const payee = await payload.findByID({
-        collection: 'customers',
-        id: payeeId,
-      })
-      await payload.update({
-        collection: 'customers',
-        id: payeeId,
-        data: {
-          wallet: {
-            balance: (payee.wallet?.balance ?? 0) + COMMISSION_PER_LEVEL,
-            totalEarned: (payee.wallet?.totalEarned ?? 0) + COMMISSION_PER_LEVEL,
-          },
-        },
-        depth: 0,
-      })
+      await addPayout(
+        payload,
+        payerId,
+        payeeId,
+        level,
+        'Uninivel',
+        COMMISSION_PER_LEVEL,
+        activationKey,
+      )
 
       created++
     }
   }
 
   return { ok: true, payouts: created }
+}
+
+const addPayout = async (
+  payload: BasePayload,
+  payerId: number,
+  payeeId: number,
+  level: number,
+  description: string,
+  amount: number,
+  activationKey: string,
+) => {
+  // Crear payout
+  await payload.create({
+    collection: 'referral_payouts',
+    data: {
+      activationKey,
+      payer: payerId,
+      payee: payeeId,
+      level,
+      amount: amount,
+      currency: CURRENCY,
+      description,
+    },
+    depth: 0,
+  })
+
+  // Acreditar en el wallet del payee (incremento funcional)
+  const payee = await payload.findByID({
+    collection: 'customers',
+    id: payeeId,
+  })
+  await payload.update({
+    collection: 'customers',
+    id: payeeId,
+    data: {
+      wallet: {
+        balance: (payee.wallet?.balance ?? 0) + amount,
+        totalEarned: (payee.wallet?.totalEarned ?? 0) + amount,
+      },
+    },
+    depth: 0,
+  })
 }

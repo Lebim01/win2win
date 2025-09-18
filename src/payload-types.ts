@@ -779,6 +779,7 @@ export interface ReferralPayout {
   level: number;
   amount: number;
   currency?: string | null;
+  description?: string | null;
   meta?:
     | {
         [k: string]: unknown;
@@ -1409,6 +1410,7 @@ export interface ReferralPayoutsSelect<T extends boolean = true> {
   level?: T;
   amount?: T;
   currency?: T;
+  description?: T;
   meta?: T;
   updatedAt?: T;
   createdAt?: T;
