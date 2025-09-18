@@ -28,15 +28,17 @@ export async function POST(req: NextRequest) {
       if (couponDocs.totalDocs > 0) {
         /**
          * el cupon solo se puede usar para inscribirse con el dueño del cupon
+         * (DESACTIVADO TEMPORAL)
          */
-        if (couponDocs.docs[0].owner == ((user!.root as Customer)?.id ?? user?.root)) {
+        coupon = couponDocs.docs[0]
+        /*if (couponDocs.docs[0].owner == ((user!.root as Customer)?.id ?? user?.root)) {
           coupon = couponDocs.docs[0]
         } else {
           return NextResponse.json(
             { error: 'Fallo inesperado', details: 'Cupón invalidó' },
             { status: 500 },
           )
-        }
+        }*/
       } else {
         return NextResponse.json(
           { error: 'Fallo inesperado', details: 'Cupón invalidó' },
