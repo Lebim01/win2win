@@ -56,6 +56,8 @@ const Signup = () => {
       phone: formData.get('phone') as string,
     }
 
+    console.log(formValues)
+
     const parsed = FormValuesSchema.safeParse(formValues)
     if (!parsed.success) {
       // errores por campo

@@ -102,7 +102,9 @@ export default function Dashboard() {
           withCredentials: true,
         },
       )
-      router.refresh()
+      setTimeout(() => {
+        router.refresh()
+      }, 500)
     } catch (err: any) {
       if (err.response?.data?.details) {
         setErrorsCoupon({
