@@ -7,7 +7,7 @@ const defaultOpenGraph: Metadata['openGraph'] = {
     'Posiciónate y gana de todas las personas que disfrutarán del servicio a nivel internacional',
   images: [
     {
-      url: `${getServerSideURL()}/website-template-OG.webp`,
+      url: `https://storage.cloud.google.com/win2win-471320/qrs/WhatsApp%20Image%202025-09-18%20at%2017.49.52.jpeg`,
     },
   ],
   siteName: 'Win to wins',
