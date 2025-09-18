@@ -103,7 +103,7 @@ export default function Dashboard() {
         },
       )
       setTimeout(() => {
-        router.refresh()
+        window.location.reload()
       }, 500)
     } catch (err: any) {
       if (err.response?.data?.details) {
