@@ -50,7 +50,7 @@ const GenerateBatchCoupons = () => {
             />
           </div>
           <div>
-            <span>Dueño</span>
+            <span>Usuario</span>
             <AutoComplete
               collection="customers"
               id="id"

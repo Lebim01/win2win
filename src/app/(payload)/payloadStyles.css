@@ -6,3 +6,7 @@
 /* Support Payload’s dark mode toggle by adding a custom variant */
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
 
+
+.collection-list__tables .table-wrap {
+  overflow-x: auto;
+}
