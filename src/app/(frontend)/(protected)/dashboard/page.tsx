@@ -210,16 +210,18 @@ export default function Dashboard() {
                       label="Cupón"
                       placeholder="ABC123"
                       className="max-w-xs"
+                      isInvalid={errorCoupon?.coupon && errorCoupon?.coupon?.length > 0}
+                      errorMessage={errorCoupon.coupon ? errorCoupon.coupon[0] : null}
                     />
-                    <Button color={'primary'} isLoading={loadingActive} className="w-full">
+                    <Button
+                      color={'primary'}
+                      isLoading={loadingActive}
+                      className="w-full"
+                      type="submit"
+                    >
                       Activar membresía
                     </Button>
                   </div>
-                  {errorCoupon?.coupon && errorCoupon?.coupon?.length > 0 && (
-                    <span className="text-red-400">
-                      {errorCoupon.coupon ? errorCoupon.coupon[0] : null}
-                    </span>
-                  )}
                   {errorCoupon?.form && errorCoupon?.form?.length > 0 && (
                     <span className="text-red-400">
                       {errorCoupon.form ? errorCoupon.form[0] : null}
