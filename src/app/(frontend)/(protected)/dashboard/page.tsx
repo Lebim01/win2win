@@ -140,7 +140,7 @@ export default function Dashboard() {
                 <p>
                   Asegúrate de mandar los{' '}
                   <span className="text-green-600">{selectedMembership.planAmount} dólares</span>{' '}
-                  completos de tu compra{' '}
+                  completos de tu compra y mandar el comprobante de compra a soporte al mail:{' '}
                   <a
                     className="text-blue-500 underline"
                     href={'mail:' + selectedMembership.qr.supportEmail}
@@ -149,7 +149,8 @@ export default function Dashboard() {
                   </a>
                 </p>
                 <p>
-                  Manda el hash de transacción comprobante al número de soporte de activar tu pack
+                  El comprobante de compra es el hash de transferencia de pago y poner tu nombre de
+                  usuario y correo que registraste en tu cuenta
                 </p>
               </ModalBody>
               <ModalFooter>
