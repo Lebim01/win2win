@@ -437,6 +437,7 @@ export default function DemoWallet() {
             amount: r.amount,
             period: month,
             status: 'paid',
+            description: r.description,
           } as CommissionRow
         }) || [],
       totalDocs: history?.totalDocs || 0,
