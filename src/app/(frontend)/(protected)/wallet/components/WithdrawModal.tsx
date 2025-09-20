@@ -104,7 +104,7 @@ export default function WithdrawModal({ balance, isOpen, setIsOpen }: Props) {
                   label="Referencia"
                   placeholder={
                     method === 'crypto'
-                      ? 'Dirección de wallet'
+                      ? 'Dirección de wallet (POLYGON)'
                       : method === 'bank'
                         ? 'Número de cuenta CLABE'
                         : 'Correo de PayPal'
