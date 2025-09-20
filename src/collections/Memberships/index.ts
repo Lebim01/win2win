@@ -4,6 +4,7 @@ const Membership: CollectionConfig = {
   slug: 'membership',
   admin: {
     useAsTitle: 'name',
+    defaultColumns: ['name', 'planAmount', 'currency', 'maxLevels', 'bonus_direct_sale'],
     description:
       'Las membresias no se pueden eliminar por seguridad, pero si se pueden crear y modificar',
   },
