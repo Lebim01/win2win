@@ -83,6 +83,11 @@ const Membership: CollectionConfig = {
           name: 'address',
           type: 'text',
         },
+        {
+          label: 'Correo de soporte',
+          name: 'supportEmail',
+          type: 'text',
+        },
       ],
     },
   ],

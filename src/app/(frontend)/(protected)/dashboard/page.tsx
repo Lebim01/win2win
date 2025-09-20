@@ -37,8 +37,6 @@ function formatCurrency(v: number | undefined, currency = 'USD') {
 }
 
 export default function Dashboard() {
-  const router = useRouter()
-
   const { data: me, loading, error } = useMe()
 
   const remaining = useMemo(
@@ -75,7 +73,7 @@ export default function Dashboard() {
 
   const [selectedMembership, setSelectedMembership] = useState<any>(null)
 
-  const { isOpen, onOpen, onOpenChange } = useDisclosure()
+  const { isOpen, onOpenChange } = useDisclosure()
 
   if (loading || loadingCoupons) return <LoadingDashboard />
   if (error || !me) return <div className="p-6">Error: {error || 'No data'}</div>
@@ -137,8 +135,22 @@ export default function Dashboard() {
                   className="object-cover object-center w-2/3"
                 />
 
-                <p>Red: {selectedMembership.qr.network} (POLYGON)</p>
+                <p>Red: POLYGON</p>
                 <p>{selectedMembership.qr.address}</p>
+                <p>
+                  Asegúrate de mandar los{' '}
+                  <span className="text-green-600">{selectedMembership.planAmount} dólares</span>{' '}
+                  completos de tu compra{' '}
+                  <a
+                    className="text-blue-500 underline"
+                    href={'mail:' + selectedMembership.qr.supportEmail}
+                  >
+                    {selectedMembership.qr.supportEmail}
+                  </a>
+                </p>
+                <p>
+                  Manda el hash de transacción comprobante al número de soporte de activar tu pack
+                </p>
               </ModalBody>
               <ModalFooter>
                 <Button color="danger" variant="light" onPress={onClose}>

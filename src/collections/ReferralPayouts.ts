@@ -1,4 +1,3 @@
-// src/collections/ReferralPayouts.ts
 import { CollectionConfig } from 'payload'
 
 export const ReferralPayouts: CollectionConfig = {

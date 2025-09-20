@@ -763,6 +763,7 @@ export interface Membership {
     network?: string | null;
     image?: (number | null) | Media;
     address?: string | null;
+    supportEmail?: string | null;
   };
   updatedAt: string;
   createdAt: string;
@@ -1478,6 +1479,7 @@ export interface MembershipSelect<T extends boolean = true> {
         network?: T;
         image?: T;
         address?: T;
+        supportEmail?: T;
       };
   updatedAt?: T;
   createdAt?: T;
