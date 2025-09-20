@@ -11,7 +11,7 @@ import { Mail, Phone } from 'lucide-react'
 export type Profile = {
   name: string
   email: string
-  phone?: string | null
+  phone: string
   avatarUrl?: string | null
 }
 
@@ -27,12 +27,9 @@ const phoneRegex = /^\+?[0-9\s()-]{7,20}$/
 const ProfileSchema = z.object({
   name: z.string().min(2, 'Mínimo 2 caracteres'),
   email: z.string().email('Correo inválido'),
-  phone: z
-    .string()
-    .optional()
-    .refine((v) => !v || phoneRegex.test(v), {
-      message: 'Formato de teléfono inválido',
-    }),
+  phone: z.string().refine((v) => !v || phoneRegex.test(v), {
+    message: 'Formato de teléfono inválido',
+  }),
 })
 
 type ProfileValues = z.infer<typeof ProfileSchema>
@@ -53,7 +50,7 @@ export function ProfileForm({
     defaultValues: {
       name: defaultValues.name,
       email: defaultValues.email,
-      phone: defaultValues.phone ?? undefined,
+      phone: defaultValues.phone,
     },
   })
 

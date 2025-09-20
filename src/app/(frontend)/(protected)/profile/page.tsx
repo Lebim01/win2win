@@ -44,7 +44,7 @@ function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePagePr
                   </div>
                 ) : (
                   <div className="flex items-center gap-2 text-muted-foreground/70">
-                    <Phone className="h-4 w-4" /> Sin teléfono
+                    <Phone className="h-4 w-4" /> {profile.phone}
                   </div>
                 )}
               </div>
@@ -85,8 +85,6 @@ function DemoProfile() {
         // TODO: Llama a tu API Payload/Nest
       }}
       onChangePassword={async (v) => {
-        console.log('change password', v)
-        // TODO: Llama a tu endpoint de cambio de contraseña
         await changePassword(v.current, v.next)
       }}
     />
