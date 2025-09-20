@@ -17,7 +17,7 @@ export const Customers: CollectionConfig = {
 
         return `Hola ${user.email}, Te dejamos en la parte de abajo la imagen para que INSTALES paso a paso tu aplicación  y utilices el servicio... VERIFICA  tu email haciendo click aquí: <a href="${url}">${url}</a> Después de verificar su correo electrónico, podrá iniciar sesión con éxito....
         <br /><br />
-        <img src="https://storage.googleapis.com/win2win-471320/qrs/WhatsApp%20Image%202025-09-20%20at%2014.00.35.jpeg" />
+        <img src="https://storage.googleapis.com/win2win-471320/qrs/WhatsApp%20Image%202025-09-20%20at%2014.00.35.jpeg" width="150px" />
         <br /><br />
         TE DEJAMOS EL CORREO DE SOPORTE: soporte@wintowins.com para cualquier duda y le recomendamos se meta al CANAL OFICIAL de WinToWins dando click aquí:  https://t.me/+Dn-F7eeG9Qo0YjNh
         `
