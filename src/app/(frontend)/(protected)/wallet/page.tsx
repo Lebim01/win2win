@@ -20,6 +20,7 @@ import {
   Select,
   SelectItem,
   Pagination,
+  useDisclosure,
 } from '@heroui/react'
 import {
   Download,
@@ -40,6 +41,7 @@ import useMe from '@/hooks/useMe'
 import { PaginatedDocs } from 'payload'
 import { Customer, ReferralPayout } from '@/payload-types'
 import useAxios from '@/hooks/useAxios'
+import WithdrawModal from './components/WithdrawModal'
 
 const fmtCurrency = (n: Money, currency: string) =>
   new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(n)
@@ -84,18 +86,23 @@ function WalletPage(props: WalletProps) {
     trend = [],
     commissions,
     withdrawals,
-    onRequestWithdraw,
     onRefresh,
     page,
     setPage,
-    level,
     setLevel,
   } = props
   const [periodFilter, setPeriodFilter] = useState<string>('') // AAAA-MM
   const [search, setSearch] = useState('')
+  const { isOpen, onOpenChange, onOpen, onClose } = useDisclosure()
 
   return (
     <div className="container mx-auto px-4 md:px-0 py-6 space-y-6" suppressHydrationWarning>
+      <WithdrawModal
+        isOpen={isOpen}
+        setIsOpen={(val) => (val ? onOpen() : onClose())}
+        balance={balance.available}
+      />
+
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
@@ -106,7 +113,7 @@ function WalletPage(props: WalletProps) {
             <RefreshCcw className="h-4 w-4 mr-2" />
             Actualizar
           </Button>
-          <Button onPress={() => onRequestWithdraw?.()} color="primary">
+          <Button onPress={() => onOpenChange()} color="primary">
             <ArrowDownToLine className="h-4 w-4 mr-2" />
             Solicitar retiro
           </Button>
@@ -148,9 +155,6 @@ function WalletPage(props: WalletProps) {
           <CardBody className="flex flex-col gap-2">
             <div className="text-3xl font-bold">
               {fmtCurrency(balance.lifetimeEarned, balance.currency)}
-            </div>
-            <div className="text-xs text-muted-foreground">
-              Último pago: {fmtDate(balance.lastPayoutAt)}
             </div>
           </CardBody>
         </Card>
@@ -315,7 +319,7 @@ function WalletPage(props: WalletProps) {
           <Card radius="sm">
             <CardHeader className="pb-2 flex items-center justify-between px-4">
               <CardTitle className="text-base font-medium">Retiros</CardTitle>
-              <Button size="sm" onPress={() => onRequestWithdraw?.()}>
+              <Button size="sm" onPress={() => onOpenChange()}>
                 <Plus className="h-4 w-4 mr-2" />
                 Nuevo retiro
               </Button>
@@ -411,8 +415,8 @@ export default function DemoWallet() {
     level,
     setLevel,
     balance: {
-      available: user?.wallet.balance || 0,
-      pending: withdrawals?.pending || 0,
+      available: (user?.wallet.balance || 0) - (Number(withdrawals?.pending) || 0),
+      pending: Number(withdrawals?.pending) || 0,
       lifetimeEarned: user?.wallet.totalEarned || 0,
       lastPayoutAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 17).toISOString(),
       currency: 'USD',

@@ -13,7 +13,7 @@ export type WithdrawalRow = {
   date: string // ISO
   amount: Money
   method: 'USDT' | 'Bank' | 'PayPal' | 'Other'
-  status: 'processing' | 'paid' | 'failed' | 'canceled'
+  status: 'pending' | 'approved' | 'rejected' | 'paid'
   reference?: string // txid, folio
 }
 

@@ -42,3 +42,41 @@ export async function GET(req: NextRequest) {
     )
   }
 }
+
+export async function POST(req: NextRequest) {
+  const payload = await getPayload({ config: payloadConfig })
+  const { user, response } = await getLoggedUser(payload, req)
+  if (response) return response
+
+  const body = await req.json()
+
+  const pending = await payload.find({
+    collection: 'withdrawals',
+    where: {
+      user: {
+        equals: user!.id,
+      },
+      status: {
+        equals: 'pending',
+      },
+    },
+  })
+
+  const total_pending = pending.docs.reduce((a, b) => a + b.amount, 0)
+  const available = (user?.wallet?.balance || 0) - total_pending
+
+  if (available >= body.amount) {
+    await payload.create({
+      collection: 'withdrawals',
+      data: {
+        user: user!.id,
+        status: 'pending',
+        amount: body.amount,
+        method: body.method,
+        reference: body.reference,
+      },
+    })
+    return Response.json({ ok: true })
+  }
+  return Response.json({ ok: false })
+}

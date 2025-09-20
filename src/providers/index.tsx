@@ -2,7 +2,7 @@ import React from 'react'
 
 import { HeaderThemeProvider } from './HeaderTheme'
 import { ThemeProvider } from './Theme'
-import { HeroUIProvider } from '@heroui/react'
+import { HeroUIProvider, ToastProvider } from '@heroui/react'
 
 export const Providers: React.FC<{
   children: React.ReactNode
@@ -10,7 +10,10 @@ export const Providers: React.FC<{
   return (
     <ThemeProvider>
       <HeaderThemeProvider>
-        <HeroUIProvider>{children}</HeroUIProvider>
+        <HeroUIProvider>
+          <ToastProvider />
+          {children}
+        </HeroUIProvider>
       </HeaderThemeProvider>
     </ThemeProvider>
   )
