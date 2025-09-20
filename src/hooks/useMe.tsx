@@ -27,6 +27,7 @@ export type CustomerMe = {
   referredCount?: number
   children: number[]
   referredBy: number
+  phone: string
   wallet: {
     balance: number
     totalEarned: number

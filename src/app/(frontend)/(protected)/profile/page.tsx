@@ -7,6 +7,7 @@ import { changePassword } from '@/services/profile.service'
 import { Profile, ProfileForm, ProfilePageProps } from './components/ProfileForm'
 import { PasswordForm } from './components/PasswordForm'
 import { CardTitle } from '@/components/ui/card'
+import useMe from '@/hooks/useMe'
 
 function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePageProps) {
   return (
@@ -68,16 +69,17 @@ function ProfilePage({ profile, onSaveProfile, onChangePassword }: ProfilePagePr
 
 // --------- Demo para previsualizar ---------
 function DemoProfile() {
-  const profile: Profile = {
-    name: 'Kevin Alvarez',
-    email: 'kevin@example.com',
-    phone: '+52 669 214 2246',
-    avatarUrl: undefined,
-  }
+  const { data, loading } = useMe()
+
+  if (loading || !data) return null
 
   return (
     <ProfilePage
-      profile={profile}
+      profile={{
+        name: data.name as string,
+        email: data.email as string,
+        phone: data.phone,
+      }}
       onSaveProfile={async (v) => {
         console.log('save profile', v)
         // TODO: Llama a tu API Payload/Nest
