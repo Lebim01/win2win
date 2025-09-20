@@ -21,6 +21,7 @@ import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 import { Withdrawals } from './collections/Withdrawals'
 import ServiceCharges from './collections/ServiceCharges'
 import Membership from './collections/Memberships'
+import { DashboardCarousel } from './collections/DashboardCarousel/config'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -84,7 +85,7 @@ export default buildConfig({
     Membership,
   ],
   cors: [getServerSideURL()].filter(Boolean),
-  globals: [Header, Footer],
+  globals: [Header, Footer, DashboardCarousel],
   plugins: [
     ...plugins,
     // storage-adapter-placeholder

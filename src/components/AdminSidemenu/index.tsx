@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import Link from 'next/link'
 import { FC, ReactNode } from 'react'
 import { FaCashRegister, FaRegUserCircle } from 'react-icons/fa'
-import { MdSpaceDashboard } from 'react-icons/md'
+import { MdOutlineViewCarousel, MdSpaceDashboard } from 'react-icons/md'
 import { RiCoupon3Fill } from 'react-icons/ri'
 import { PiHandWithdrawFill } from 'react-icons/pi'
 import { BiSolidReport, BiSolidServer } from 'react-icons/bi'
@@ -57,6 +57,16 @@ const AdminSidemenu = (props: any) => {
               iconPosition="left"
             >
               <span>Membresias</span>
+            </Button>
+          </Link>
+          <Link href="/admin/globals/dashboard" className="w-full no-underline">
+            <Button
+              className="flex w-full m-0"
+              buttonStyle="primary"
+              icon={<MdOutlineViewCarousel size={16} />}
+              iconPosition="left"
+            >
+              <span>Configurar Dashboard</span>
             </Button>
           </Link>
           <Link href="/admin" className="w-full no-underline">

@@ -28,8 +28,9 @@ import useMe from '@/hooks/useMe'
 import LoadingDashboard from './LoadingPage'
 import useAxios from '@/hooks/useAxios'
 import axios from 'axios'
-import { useRouter } from 'next/navigation'
 import clsx from 'clsx'
+import { useDashboard } from '@/hooks/useDashboard'
+import { SectionCarousel } from '@/components/Carousel/Component'
 
 // --- Utility functions ---
 function formatCurrency(v: number | undefined, currency = 'USD') {
@@ -38,6 +39,7 @@ function formatCurrency(v: number | undefined, currency = 'USD') {
 
 export default function Dashboard() {
   const { data: me, loading, error } = useMe()
+  const dashboard = useDashboard()
 
   const remaining = useMemo(
     () => diffNow(me?.membership?.currentPeriodEnd),
@@ -172,6 +174,10 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {dashboard.images.length > 0 && (
+        <SectionCarousel items={dashboard.images.map((r) => r.image)} />
+      )}
 
       {/* Top cards */}
       <div className="grid gap-4 md:grid-cols-3">

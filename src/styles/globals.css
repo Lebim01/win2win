@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @plugin './hero.ts';
+@import './embla.css';
 
 @source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
 @custom-variant dark (&:where(.dark, .dark *));
