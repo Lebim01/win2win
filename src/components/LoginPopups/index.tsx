@@ -166,7 +166,7 @@ const LoginPopups = ({
                 <img
                   src={imageUrl}
                   alt={current?.title || 'popup'}
-                  className="w-full h-auto block"
+                  className="w-full h-auto block max-h-[80vh]"
                 />
               </a>
             ) : (
