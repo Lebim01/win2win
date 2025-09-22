@@ -7,6 +7,7 @@ export const GET = async () => {
     slug: 'dashboard',
     select: {
       images: true,
+      items: true,
     },
     depth: 2,
   })

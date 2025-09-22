@@ -31,6 +31,7 @@ import axios from 'axios'
 import clsx from 'clsx'
 import { useDashboard } from '@/hooks/useDashboard'
 import { SectionCarousel } from '@/components/Carousel/Component'
+import LoginPopups from '@/components/LoginPopups'
 
 // --- Utility functions ---
 function formatCurrency(v: number | undefined, currency = 'USD') {
@@ -122,6 +123,8 @@ export default function Dashboard() {
 
   return (
     <div className="container mx-auto p-4 md:p-6 md:px-0 md:py-12 grid gap-4">
+      <LoginPopups trigger="onLogin" />
+
       <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
         <ModalContent>
           {(onClose) => (

@@ -1774,6 +1774,25 @@ export interface Dashboard {
         id?: string | null;
       }[]
     | null;
+  /**
+   * Cada item representa una imagen (u opcionalmente un CTA). Se mostrarán en el orden definido por "orden".
+   */
+  items?:
+    | {
+        active?: boolean | null;
+        title?: string | null;
+        media: number | Media;
+        link?: {
+          url?: string | null;
+          newTab?: boolean | null;
+        };
+        validity?: {
+          startAt?: string | null;
+          endAt?: string | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1832,6 +1851,26 @@ export interface DashboardSelect<T extends boolean = true> {
     | T
     | {
         image?: T;
+        id?: T;
+      };
+  items?:
+    | T
+    | {
+        active?: T;
+        title?: T;
+        media?: T;
+        link?:
+          | T
+          | {
+              url?: T;
+              newTab?: T;
+            };
+        validity?:
+          | T
+          | {
+              startAt?: T;
+              endAt?: T;
+            };
         id?: T;
       };
   updatedAt?: T;
