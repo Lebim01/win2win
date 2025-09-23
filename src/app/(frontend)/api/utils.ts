@@ -72,6 +72,7 @@ export const getLoggedUser = async (
       root: true,
       wallet: true,
       membershipHistory: true,
+      childrenCount: true,
     },
     depth: 3,
   })
