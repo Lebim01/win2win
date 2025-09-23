@@ -46,7 +46,7 @@ const SignIn = () => {
         <div className="w-full bg-white border border-[var(--color-border)] rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
             <h1 className="text-xl font-bold leading-tight tracking-tight">
-              Sign in to your account
+              Inicia sesión en tu cuenta
             </h1>
             <form className="space-y-4" onSubmit={onSubmit}>
               <Input
@@ -59,7 +59,7 @@ const SignIn = () => {
               />
 
               <Input
-                label="Password"
+                label="Contraseña"
                 name="password"
                 type="password"
                 placeholder="••••••••"
@@ -75,14 +75,14 @@ const SignIn = () => {
                 ))}
 
               <Button type="submit" color="primary" fullWidth>
-                Sign in
+                Entrar
               </Button>
               <p className="text-sm font-light text-right">
                 <Link
                   href="/forgot-password"
                   className="font-medium text-primary-600 hover:underline dark:text-primary-500"
                 >
-                  Forgot password?
+                  ¿Olvidaste tu contraseña?
                 </Link>
               </p>
             </form>

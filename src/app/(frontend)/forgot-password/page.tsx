@@ -41,7 +41,7 @@ export default function RecoveryPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4">
       <Card className="w-full max-w-md shadow-lg">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center flex flex-col gap-1">
           <h1 className="text-xl font-semibold text-white">Recuperar contraseña</h1>
           <p className="text-gray-400 text-sm">
             Ingresa tu correo para enviarte un enlace de recuperación.
