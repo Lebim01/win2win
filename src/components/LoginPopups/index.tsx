@@ -65,9 +65,7 @@ function inWindow(start?: string, end?: string) {
 }
 
 const LoginPopups = ({
-  userRole,
   apiBase = '/api',
-  trigger = 'onLogin',
 }: {
   userRole?: string
   apiBase?: string
@@ -97,7 +95,7 @@ const LoginPopups = ({
     } catch (e) {
       console.error('LoginPopups fetch error', e)
     }
-  }, [apiBase, trigger, userRole])
+  }, [apiBase])
 
   const openNext = useCallback(() => {
     setCanClose(true)
@@ -119,8 +117,6 @@ const LoginPopups = ({
           //markShown(id, next.frequency)
         }, delay)
       }
-      console.log(prev)
-      if (prev.length == 1) return []
       return prev.slice(1, prev.length)
     })
   }, [])
