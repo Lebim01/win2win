@@ -1,5 +1,5 @@
 import payloadConfig from '@payload-config'
-import { NextRequest } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { getPayload } from 'payload'
 
 export const POST = async (req: NextRequest) => {
@@ -11,5 +11,9 @@ export const POST = async (req: NextRequest) => {
     data: {
       email: body.email,
     },
+  })
+
+  return NextResponse.json({
+    ok: true,
   })
 }
