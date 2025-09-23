@@ -25,7 +25,7 @@ export const Customers: CollectionConfig = {
     },
     forgotPassword: {
       generateEmailHTML: ({ token }: any) => {
-        const url = `${getServerSideURL()}reset/${token}`
+        const url = `${getServerSideURL()}reset?token=${token}`
         return `
           Recibes este correo porque tú (u otra persona) has solicitado restablecer la contraseña de tu cuenta. Haz clic en el siguiente enlace o pégalo en tu navegador para completar el proceso: ${url}. Si no lo solicitaste, ignora este correo electrónico y tu contraseña se mantendrá sin cambios.
         `
