@@ -172,9 +172,7 @@ export default function Dashboard() {
         <Avatar name={me.name || me.email} />
         <div>
           <h1 className="text-xl font-semibold">Hola, {me.name || me.email}</h1>
-          <div className="text-sm opacity-70">
-            Nivel: {me.level ?? 0} · Referidos directos: {me.childrenCount ?? 0}
-          </div>
+          <div className="text-sm opacity-70">Referidos directos: {me.childrenCount ?? 0}</div>
         </div>
       </div>
 

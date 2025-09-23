@@ -3,7 +3,7 @@ import type { NextRequest } from 'next/server'
 
 const protected_routes = ['/dashboard', '/profile', '/referrals', '/wallet']
 
-const no_authenticated_routes = ['/sign-in', '/reset', '/forgot-password']
+const no_authenticated_routes = ['/sign-in']
 
 export function middleware(request: NextRequest) {
   const url = new URL(request.url)
@@ -37,7 +37,6 @@ export function middleware(request: NextRequest) {
 
   return NextResponse.next({
     request: {
-      // Apply new request headers
       headers: requestHeaders,
     },
   })
