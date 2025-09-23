@@ -178,7 +178,7 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {dashboard.images.length > 0 && (
+      {dashboard && dashboard?.images.length > 0 && (
         <SectionCarousel items={dashboard.images.map((r) => r.image)} />
       )}
 
