@@ -91,7 +91,7 @@ export default function ResetPassword() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-900 px-4 py-10">
       <Card className="w-full max-w-md shadow-xl">
-        <CardHeader className="text-center">
+        <CardHeader className="text-center flex flex-col gap-1">
           <h1 className="text-xl font-semibold text-white">Restablecer contraseña</h1>
           <p className="text-gray-400 text-sm">Crea una nueva contraseña segura para tu cuenta.</p>
         </CardHeader>

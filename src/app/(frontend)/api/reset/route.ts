@@ -111,6 +111,7 @@ export const POST = async (req: NextRequest) => {
 
     return json({ ok: true, message: 'Contraseña actualizada correctamente.' }, { status: 200 })
   } catch (error: any) {
+    console.log(error)
     // Normaliza mensajes comunes
     const msg = String(error?.message || '').toLowerCase()
     if (msg.includes('token') && (msg.includes('invalid') || msg.includes('expired'))) {
